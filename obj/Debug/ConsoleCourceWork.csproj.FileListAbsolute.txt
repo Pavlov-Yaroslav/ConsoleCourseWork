@@ -1,0 +1,8 @@
+C:\Users\Ярослав\source\repos\ConsoleCourceWork\bin\Debug\ConsoleCourceWork.exe.config
+C:\Users\Ярослав\source\repos\ConsoleCourceWork\bin\Debug\ConsoleCourceWork.exe
+C:\Users\Ярослав\source\repos\ConsoleCourceWork\bin\Debug\ConsoleCourceWork.pdb
+C:\Users\Ярослав\source\repos\ConsoleCourceWork\obj\Debug\ConsoleCourceWork.csproj.AssemblyReference.cache
+C:\Users\Ярослав\source\repos\ConsoleCourceWork\obj\Debug\ConsoleCourceWork.csproj.CoreCompileInputs.cache
+C:\Users\Ярослав\source\repos\ConsoleCourceWork\obj\Debug\ConsoleCourceWork.exe
+C:\Users\Ярослав\source\repos\ConsoleCourceWork\obj\Debug\ConsoleCourceWork.pdb
+C:\Users\Ярослав\source\repos\ConsoleCourceWork\obj\Debug\ConsoleCourceWork.exe.config
