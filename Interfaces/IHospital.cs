@@ -17,5 +17,12 @@ namespace ConsoleCourceWork.Interfaces
         void AddBuilding(Building building);
         void RemoveBuilding(Building building);
         PatientPlacement AdmitPatient(IPatient patient, IDiagnosis diagnosis);
+
+        bool DischargePatient(IPatient patient);
+        bool DeletePatient(IPatient patient);
+
+        // Возвращаем вспомогательные методы
+        List<PatientPlacement> GetActivePlacements();
+        List<PatientPlacement> GetDischargedPatients();
     }
 }

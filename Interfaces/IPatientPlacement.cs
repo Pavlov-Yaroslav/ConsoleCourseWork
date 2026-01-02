@@ -15,6 +15,7 @@ namespace ConsoleCourceWork.Interfaces
         IWard Ward { get; }
         int BedNumber { get; }
         DateTime AdmissionDate { get; }
+        DateTime? DischargeDate { get; } // Добавляем
         bool IsActive { get; }
     }
 }

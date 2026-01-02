@@ -16,6 +16,7 @@ namespace ConsoleCourceWork.Models
         public Interfaces.IWard Ward { get; }
         public int BedNumber { get; }
         public DateTime AdmissionDate { get; }
+        public DateTime? DischargeDate { get; private set; }
         public bool IsActive { get; private set; }
 
         public PatientPlacement(Interfaces.IPatient patient, Interfaces.IDiagnosis diagnosis,
@@ -39,17 +40,33 @@ namespace ConsoleCourceWork.Models
             if (IsActive)
             {
                 IsActive = false;
-                Ward.ReleaseBed(BedNumber);
+                DischargeDate = DateTime.Now;
+
+                // Освобождаем койку
+                if (Ward != null)
+                {
+                    Ward.ReleaseBed(BedNumber);
+                }
+
+                // Обнуляем указатели для предотвращения утечек памяти
+                // (в C# это не обязательно, но хорошо для ясности)
+                // В реальности объекты не удаляются, просто освобождаем ссылки
+
+                // Примечание: В C# мы не можем "обнулить" свойства только для чтения (get-only)
+                // но мы можем отметить объект как выписанный
             }
         }
 
         public override string ToString()
         {
+            string status = IsActive ? "В больнице" : $"Выписан {DischargeDate:dd.MM.yyyy}";
+
             return $"Пациент: {Patient.Name} {Patient.Surname}\n" +
                    $"Диагноз: {Diagnosis.Description}\n" +
                    $"Здание: {Building.Name}, Отделение: {Department.Name}\n" +
                    $"Палата: {Ward.WardNumber}, Койка: {BedNumber}\n" +
-                   $"Дата: {AdmissionDate:dd.MM.yyyy}";
+                   $"Поступил: {AdmissionDate:dd.MM.yyyy}\n" +
+                   $"Статус: {status}";
         }
     }
 }

@@ -28,6 +28,12 @@ namespace ConsoleCourceWork.Models
             Console.WriteLine($"\nРегистрация пациента: {patient.Surname} {patient.Name}");
             Console.WriteLine($"Диагноз: {diagnosis.Description}");
 
+            if (PatientPlacements.ContainsKey(patient) && PatientPlacements[patient].IsActive)
+            {
+                Console.WriteLine($"Пациент уже находится в больнице!");
+                return null;
+            }
+
             var department = FindAvailableDepartment(diagnosis.RequiredSpecialization);
             if (department == null)
             {
@@ -57,6 +63,66 @@ namespace ConsoleCourceWork.Models
             return placement;
         }
 
+        public bool DischargePatient(Interfaces.IPatient patient)
+        {
+            if (!PatientPlacements.ContainsKey(patient))
+            {
+                Console.WriteLine($"Пациент {patient.Surname} {patient.Name} не найден в системе.");
+                return false;
+            }
+
+            var placement = PatientPlacements[patient];
+
+            if (!placement.IsActive)
+            {
+                Console.WriteLine($"Пациент {patient.Surname} {patient.Name} уже выписан.");
+                return false;
+            }
+
+            placement.Discharge();
+
+            Console.WriteLine($"Пациент {patient.Surname} {patient.Name} выписан.");
+            Console.WriteLine($"Освобождена койка: {placement.Ward.WardNumber}-{placement.BedNumber}");
+
+            return true;
+        }
+
+        public bool DeletePatient(Interfaces.IPatient patient)
+        {
+            if (!PatientPlacements.ContainsKey(patient))
+            {
+                Console.WriteLine($"Пациент {patient.Surname} {patient.Name} не найден в системе.");
+                return false;
+            }
+
+            var placement = PatientPlacements[patient];
+
+            if (placement.IsActive)
+            {
+                placement.Discharge();
+            }
+
+            PatientPlacements.Remove(patient);
+
+            Console.WriteLine($"Пациент {patient.Surname} {patient.Name} полностью удален из системы.");
+
+            return true;
+        }
+
+        public List<PatientPlacement> GetActivePlacements()
+        {
+            return PatientPlacements.Values
+                .Where(p => p.IsActive)
+                .ToList();
+        }
+
+        public List<PatientPlacement> GetDischargedPatients()
+        {
+            return PatientPlacements.Values
+                .Where(p => !p.IsActive)
+                .ToList();
+        }
+
         private Interfaces.IDepartment FindAvailableDepartment(Enums.SpecializationDep specialization)
         {
             foreach (var building in Buildings)
@@ -74,7 +140,12 @@ namespace ConsoleCourceWork.Models
 
         public override string ToString()
         {
-            return $"Больница: {Buildings.Count} зданий, {PatientPlacements.Count} пациентов";
+            int activePatients = GetActivePlacements().Count;
+            int dischargedPatients = GetDischargedPatients().Count;
+
+            return $"Больница: {Buildings.Count} зданий, " +
+                   $"{activePatients} пациентов в больнице, " +
+                   $"{dischargedPatients} выписанных";
         }
     }
 }
