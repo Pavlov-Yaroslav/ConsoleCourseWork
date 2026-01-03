@@ -14,5 +14,6 @@ namespace ConsoleCourceWork.Interfaces
         string Patronymic { get; }
         DateTime BirthDate { get; }
         string InsuranceNumber { get; }
+        List<ITreatmentRecord> TreatmentHistory { get; } // Только это нужно для истории болезней
     }
 }

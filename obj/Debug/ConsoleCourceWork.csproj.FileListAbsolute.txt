@@ -6,3 +6,11 @@ C:\Users\Ярослав\source\repos\ConsoleCourceWork\obj\Debug\ConsoleCourceWo
 C:\Users\Ярослав\source\repos\ConsoleCourceWork\obj\Debug\ConsoleCourceWork.exe
 C:\Users\Ярослав\source\repos\ConsoleCourceWork\obj\Debug\ConsoleCourceWork.pdb
 C:\Users\Ярослав\source\repos\ConsoleCourceWork\obj\Debug\ConsoleCourceWork.exe.config
+C:\Users\Ярослав\source\repos\ConsoleCourseWork\bin\Debug\ConsoleCourceWork.exe.config
+C:\Users\Ярослав\source\repos\ConsoleCourseWork\bin\Debug\ConsoleCourceWork.exe
+C:\Users\Ярослав\source\repos\ConsoleCourseWork\bin\Debug\ConsoleCourceWork.pdb
+C:\Users\Ярослав\source\repos\ConsoleCourseWork\obj\Debug\ConsoleCourceWork.csproj.AssemblyReference.cache
+C:\Users\Ярослав\source\repos\ConsoleCourseWork\obj\Debug\ConsoleCourceWork.exe.config
+C:\Users\Ярослав\source\repos\ConsoleCourseWork\obj\Debug\ConsoleCourceWork.csproj.CoreCompileInputs.cache
+C:\Users\Ярослав\source\repos\ConsoleCourseWork\obj\Debug\ConsoleCourceWork.exe
+C:\Users\Ярослав\source\repos\ConsoleCourseWork\obj\Debug\ConsoleCourceWork.pdb

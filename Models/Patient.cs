@@ -15,6 +15,7 @@ namespace ConsoleCourceWork.Models
         public string Patronymic { get; }
         public DateTime BirthDate { get; }
         public string InsuranceNumber { get; }
+        public List<Interfaces.ITreatmentRecord> TreatmentHistory { get; private set; }
 
         public Patient(string id, string surname, string name, string patronymic,
                       DateTime birthDate, string insuranceNumber)
@@ -25,6 +26,7 @@ namespace ConsoleCourceWork.Models
             Patronymic = patronymic;
             BirthDate = birthDate;
             InsuranceNumber = insuranceNumber;
+            TreatmentHistory = new List<Interfaces.ITreatmentRecord>();
         }
 
         public override string ToString()

@@ -8,11 +8,33 @@ using ConsoleCourceWork.Interfaces;
 
 namespace ConsoleCourceWork.Models
 {
-    public class Hospital : Interfaces.IHospital
+    public class Hospital : Interfaces.IHospital, Interfaces.IMedInstitution
     {
+        // Свойства IMedInstitution (только необходимые)
+        public string Name { get; private set; }
+        public string Address { get; private set; }
+        public string ID { get; private set; }
+        public bool IsActive { get; set; }
+
+        // Свойства IHospital
         public List<Building> Buildings { get; private set; } = new List<Building>();
         public Dictionary<Interfaces.IPatient, PatientPlacement> PatientPlacements { get; private set; } = new Dictionary<Interfaces.IPatient, PatientPlacement>();
 
+        // Конструктор с параметрами
+        public Hospital(string id, string name, string address)
+        {
+            ID = id;
+            Name = name;
+            Address = address;
+            IsActive = true;
+        }
+
+        // Конструктор по умолчанию
+        public Hospital() : this("H001", "Городская больница", "ул. Центральная, 1")
+        {
+        }
+
+        // Методы IHospital
         public void AddBuilding(Building building)
         {
             Buildings.Add(building);
@@ -25,7 +47,7 @@ namespace ConsoleCourceWork.Models
 
         public PatientPlacement AdmitPatient(Interfaces.IPatient patient, Interfaces.IDiagnosis diagnosis)
         {
-            Console.WriteLine($"\nРегистрация пациента: {patient.Surname} {patient.Name}");
+            Console.WriteLine($"\n[{Name}] Регистрация пациента: {patient.Surname} {patient.Name}");
             Console.WriteLine($"Диагноз: {diagnosis.Description}");
 
             if (PatientPlacements.ContainsKey(patient) && PatientPlacements[patient].IsActive)
@@ -79,10 +101,31 @@ namespace ConsoleCourceWork.Models
                 return false;
             }
 
+            // Используем генератор ID
+            var recordId = Services.IdGenerator.GenerateTreatmentRecordId();
+
+            // Создаем запись в истории болезней
+            var treatmentRecord = new TreatmentRecord(
+                recordId,
+                patient,
+                this as Interfaces.IMedInstitution,
+                placement.AdmissionDate
+            );
+
+            // Добавляем диагноз
+            treatmentRecord.AddDiagnosis(placement.Diagnosis);
+
+            // Завершаем запись
+            treatmentRecord.CompleteRecord(DateTime.Now);
+
+            // Добавляем запись в историю пациента
+            patient.TreatmentHistory.Add(treatmentRecord);
+
+            // Выписываем пациента
             placement.Discharge();
 
-            Console.WriteLine($"Пациент {patient.Surname} {patient.Name} выписан.");
-            Console.WriteLine($"Освобождена койка: {placement.Ward.WardNumber}-{placement.BedNumber}");
+            Console.WriteLine($"[{Name}] Пациент {patient.Surname} {patient.Name} выписан.");
+            Console.WriteLine($"Создана запись в истории болезней: #{recordId}");
 
             return true;
         }
@@ -104,7 +147,7 @@ namespace ConsoleCourceWork.Models
 
             PatientPlacements.Remove(patient);
 
-            Console.WriteLine($"Пациент {patient.Surname} {patient.Name} полностью удален из системы.");
+            Console.WriteLine($"[{Name}] Пациент {patient.Surname} {patient.Name} полностью удален из системы.");
 
             return true;
         }
@@ -143,9 +186,11 @@ namespace ConsoleCourceWork.Models
             int activePatients = GetActivePlacements().Count;
             int dischargedPatients = GetDischargedPatients().Count;
 
-            return $"Больница: {Buildings.Count} зданий, " +
-                   $"{activePatients} пациентов в больнице, " +
-                   $"{dischargedPatients} выписанных";
+            return $"{Name} (ID: {ID})\n" +
+                   $"Адрес: {Address}\n" +
+                   $"Статус: {(IsActive ? "Активна" : "Неактивна")}\n" +
+                   $"Зданий: {Buildings.Count}\n" +
+                   $"Пациентов: {activePatients} в больнице, {dischargedPatients} выписанных";
         }
     }
 }

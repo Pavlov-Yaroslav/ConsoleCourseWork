@@ -1,30 +1,26 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourceWork\\",
+  "WorkspaceRootPath": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|c:\\users\\\u044F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\consolecourcework\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|c:\\users\\\u044F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\consolecourcework\\models\\hospital.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|c:\\users\\\u044F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\consolecoursework\\models\\hospital.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|solutionrelative:models\\hospital.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|c:\\users\\\u044F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\consolecourcework\\interfaces\\ihospital.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|solutionrelative:interfaces\\ihospital.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|c:\\users\\\u044F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\consolecoursework\\models\\idgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|solutionrelative:models\\idgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|c:\\users\\\u044F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\consolecourcework\\models\\patientplacement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|solutionrelative:models\\patientplacement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|c:\\users\\\u044F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\consolecoursework\\models\\treatmentrecord.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|solutionrelative:models\\treatmentrecord.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|c:\\users\\\u044F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\consolecourcework\\interfaces\\ipatientplacement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|solutionrelative:interfaces\\ipatientplacement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|c:\\users\\\u044F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\consolecourcework\\interfaces\\ipatient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|solutionrelative:interfaces\\ipatient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|c:\\users\\\u044F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\consolecoursework\\interfaces\\itreatmentrecord.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|solutionrelative:interfaces\\itreatmentrecord.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -40,11 +36,11 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourceWork\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourceWork\\Program.cs",
+              "ToolTip": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAABIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-30T11:17:19.155Z",
               "IsPinned": true,
@@ -53,71 +49,53 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "IHospital.cs",
-              "DocumentMoniker": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourceWork\\Interfaces\\IHospital.cs",
-              "RelativeDocumentMoniker": "Interfaces\\IHospital.cs",
-              "ToolTip": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourceWork\\Interfaces\\IHospital.cs",
-              "RelativeToolTip": "Interfaces\\IHospital.cs",
-              "ViewState": "AgIAAAEAAAAAAAAAAAAYwBIAAAAYAAAAAAAAAA==",
+              "Title": "IdGenerator.cs",
+              "DocumentMoniker": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\Models\\IdGenerator.cs",
+              "RelativeDocumentMoniker": "Models\\IdGenerator.cs",
+              "ToolTip": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\Models\\IdGenerator.cs",
+              "RelativeToolTip": "Models\\IdGenerator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-02T11:04:21.255Z",
-              "IsPinned": true,
+              "WhenOpened": "2026-01-03T14:08:06.29Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "Hospital.cs",
-              "DocumentMoniker": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourceWork\\Models\\Hospital.cs",
+              "DocumentMoniker": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\Models\\Hospital.cs",
               "RelativeDocumentMoniker": "Models\\Hospital.cs",
-              "ToolTip": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourceWork\\Models\\Hospital.cs",
+              "ToolTip": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\Models\\Hospital.cs",
               "RelativeToolTip": "Models\\Hospital.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAQwIcAAABdAAAAAAAAAA==",
+              "ViewState": "AgIAAFkAAAAAAAAAAAAQwIIAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-02T11:13:17.671Z",
-              "IsPinned": true,
+              "WhenOpened": "2026-01-03T13:39:03.447Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "IPatientPlacement.cs",
-              "DocumentMoniker": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourceWork\\Interfaces\\IPatientPlacement.cs",
-              "RelativeDocumentMoniker": "Interfaces\\IPatientPlacement.cs",
-              "ToolTip": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourceWork\\Interfaces\\IPatientPlacement.cs",
-              "RelativeToolTip": "Interfaces\\IPatientPlacement.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAA1AAAAAAAAAA==",
+              "Title": "ITreatmentRecord.cs",
+              "DocumentMoniker": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\Interfaces\\ITreatmentRecord.cs",
+              "RelativeDocumentMoniker": "Interfaces\\ITreatmentRecord.cs",
+              "ToolTip": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\Interfaces\\ITreatmentRecord.cs",
+              "RelativeToolTip": "Interfaces\\ITreatmentRecord.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-02T11:12:35.942Z",
-              "IsPinned": true,
+              "WhenOpened": "2026-01-03T13:35:28.014Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "PatientPlacement.cs",
-              "DocumentMoniker": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourceWork\\Models\\PatientPlacement.cs",
-              "RelativeDocumentMoniker": "Models\\PatientPlacement.cs",
-              "ToolTip": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourceWork\\Models\\PatientPlacement.cs",
-              "RelativeToolTip": "Models\\PatientPlacement.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAcwAUAAAAdAAAAAAAAAA==",
+              "Title": "TreatmentRecord.cs",
+              "DocumentMoniker": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\Models\\TreatmentRecord.cs",
+              "RelativeDocumentMoniker": "Models\\TreatmentRecord.cs",
+              "ToolTip": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\Models\\TreatmentRecord.cs",
+              "RelativeToolTip": "Models\\TreatmentRecord.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAACUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-02T11:08:40.069Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "IPatient.cs",
-              "DocumentMoniker": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourceWork\\Interfaces\\IPatient.cs",
-              "RelativeDocumentMoniker": "Interfaces\\IPatient.cs",
-              "ToolTip": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourceWork\\Interfaces\\IPatient.cs",
-              "RelativeToolTip": "Interfaces\\IPatient.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-02T11:05:50.067Z",
-              "IsPinned": true,
+              "WhenOpened": "2026-01-03T13:38:16.875Z",
               "EditorCaption": ""
             },
             {
