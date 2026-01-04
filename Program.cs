@@ -42,6 +42,22 @@ namespace ConsoleCourceWork
             // Дополнительные демонстрации
             DemonstrateAdditionalFeatures(hospital, patients);
 
+            // ================================================
+            // НОВАЯ ЧАСТЬ: ДЕМОНСТРАЦИЯ РАБОТЫ С ПОЛИКЛИНИКАМИ
+            // ================================================
+
+            Console.WriteLine("\n" + new string('=', 70));
+            Console.WriteLine("ДЕМОНСТРАЦИЯ РАБОТЫ С ПОЛИКЛИНИКАМИ И БОЛЬНИЦАМИ");
+            Console.WriteLine(new string('=', 70));
+
+            // 1. Демонстрация прикреплений поликлиник к больницам (множественное)
+            Console.WriteLine("\n[Часть 1: Прикрепление нескольких поликлиник к разным больницам]");
+            DemonstrateClinicAttachment(hospital);
+
+            // 2. Демонстрация операций внутри одной поликлиники
+            Console.WriteLine("\n[Часть 2: Операции внутри одной поликлиники]");
+            DemonstrateClinicOperations();
+
             Console.WriteLine("\nНажмите любую клавишу для выхода...");
             Console.ReadKey();
         }
@@ -555,6 +571,169 @@ namespace ConsoleCourceWork
                     }
                 }
             }
+        }
+
+        static void DemonstrateClinicAttachment(Hospital existingHospital)
+        {
+            Console.WriteLine("\n=== СОЗДАНИЕ И ПРИКРЕПЛЕНИЕ ПОЛИКЛИНИК ===");
+
+            // Используем сервис
+            var attachmentService = new ClinicAttachmentService();
+
+            // Создаем новую больницу специально для поликлиник
+            var polyclinicHospital = new Hospital(
+                "H002",
+                "Городская поликлиническая больница",
+                "ул. Поликлиническая, 5");
+
+            // Создаем поликлиники
+            var clinics = new[]
+            {
+        new Clinic("C001", "Поликлиника №1", "ул. Центральная, 10"),
+        new Clinic("C002", "Детская поликлиника", "ул. Школьная, 15"),
+        new Clinic("C003", "Стоматологическая поликлиника", "ул. Зубная, 3"),
+        new Clinic("C004", "Женская консультация", "ул. Гинекологическая, 7")
+    };
+
+            Console.WriteLine("\n1. Прикрепляем поликлиники к больницам:");
+
+            // Поликлиника 1 и 2 к новой больнице
+            attachmentService.AttachClinicToHospital(clinics[0], polyclinicHospital);
+            attachmentService.AttachClinicToHospital(clinics[1], polyclinicHospital);
+
+            // Поликлиника 3 к существующей больнице (из параметра)
+            attachmentService.AttachClinicToHospital(clinics[2], existingHospital);
+
+            Console.WriteLine("\n2. Выводим все прикрепления:");
+            attachmentService.PrintAllAttachments();
+
+            Console.WriteLine("\n3. Информация о поликлиниках:");
+            foreach (var clinic in clinics)
+            {
+                Console.WriteLine(clinic);
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("\n4. Получаем статистику:");
+            Console.WriteLine($"Всего прикреплений: {attachmentService.GetClinicsForHospital(polyclinicHospital).Count + attachmentService.GetClinicsForHospital(existingHospital).Count}");
+            Console.WriteLine($"К {polyclinicHospital.Name} прикреплено: {attachmentService.GetClinicCountForHospital(polyclinicHospital)}");
+            Console.WriteLine($"К {existingHospital.Name} прикреплено: {attachmentService.GetClinicCountForHospital(existingHospital)}");
+
+            Console.WriteLine("\n5. Открепляем одну поликлинику и проверяем:");
+            attachmentService.DetachClinic(clinics[1]);
+
+            Console.WriteLine("\n6. Финальный статус прикреплений:");
+            attachmentService.PrintAllAttachments();
+
+            Console.WriteLine("\n7. Пробуем создать направление пациента (демонстрация связи):");
+            try
+            {
+                // Создаем тестового пациента
+                var testPatient = new Patient(
+                    "P999",
+                    "Иванов",
+                    "Иван",
+                    "Иванович",
+                    new DateTime(1980, 5, 15),
+                    "INS999999999");
+
+                // Регистрируем пациента в поликлинике
+                // (если бы у Clinic был такой метод)
+                Console.WriteLine($"Пациент {testPatient.Surname} может быть направлен из {clinics[0].Name} в {clinics[0].AttachedHospital.Name}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Примечание: {ex.Message}");
+            }
+
+            Console.WriteLine("\n✓ Демонстрация работы с поликлиниками завершена!");
+        }
+
+        static void DemonstrateClinicOperations()
+        {
+            Console.WriteLine("\n=== ДЕМОНСТРАЦИЯ РАБОТЫ ПОЛИКЛИНИКИ ===\n");
+
+            // Создаем поликлинику
+            var clinic = new Clinic("C010", "Районная поликлиника", "ул. Районная, 20");
+
+            Console.WriteLine("1. Создана поликлиника:");
+            Console.WriteLine(clinic);
+
+            // Создаем тестового персонал
+            Console.WriteLine("\n2. Добавляем персонал:");
+
+            var therapist = new Therapist(
+                "T010", "Петров", "Иван", "Сергеевич",
+                "LIC-THER-010", 85000);
+
+            var cardiologist = new Cardiologist(
+                "C010", "Сидоров", "Алексей", "Михайлович",
+                "LIC-CARD-010", 95000);
+
+            clinic.AddStaff(therapist);
+            clinic.AddStaff(cardiologist);
+
+            // Создаем тестовых пациентов
+            Console.WriteLine("\n3. Регистрируем пациентов:");
+
+            var patient1 = new Patient(
+                "P010", "Иванова", "Мария", "Петровна",
+                new DateTime(1975, 3, 15), "INS010101010");
+
+            var patient2 = new Patient(
+                "P011", "Кузнецов", "Сергей", "Андреевич",
+                new DateTime(1982, 7, 22), "INS010101011");
+
+            clinic.AddPatient(patient1);
+            clinic.AddPatient(patient2);
+
+            // Показываем обновленную информацию
+            Console.WriteLine("\n4. Текущее состояние поликлиники:");
+            Console.WriteLine(clinic);
+
+            // Создаем сервис прикреплений ДО прикрепления
+            Console.WriteLine("\n5. Прикрепляем к больнице через сервис:");
+            var hospital = new Hospital("H010", "Районная больница", "ул. Больничная, 1");
+
+            var attachmentService = new ClinicAttachmentService();
+
+            try
+            {
+                // Используем только сервис, а не прямой метод
+                attachmentService.AttachClinicToHospital(clinic, hospital);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка: {ex.Message}");
+            }
+
+            // Показываем связи через сервис
+            Console.WriteLine("\n6. Текущие прикрепления в сервисе:");
+            attachmentService.PrintAllAttachments();
+
+            // Удаляем одного пациента и одного сотрудника
+            Console.WriteLine("\n7. Удаляем пациента и сотрудника:");
+            clinic.RemovePatient(patient1);
+            clinic.RemoveStaff(cardiologist);
+
+            Console.WriteLine("\n8. Финальное состояние поликлиники:");
+            Console.WriteLine(clinic);
+
+            // Открепляем через сервис
+            Console.WriteLine("\n9. Открепляем поликлинику:");
+            try
+            {
+                attachmentService.DetachClinic(clinic);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка: {ex.Message}");
+            }
+
+            Console.WriteLine("\n10. Финальный статус прикреплений:");
+            attachmentService.PrintAllAttachments();
+
+            Console.WriteLine("\n✓ Демонстрация работы поликлиники завершена!");
         }
     }
 }
