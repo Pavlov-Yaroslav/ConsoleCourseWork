@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace ConsoleCourceWork.Interfaces
 {
     public interface IPatientPlacement
@@ -15,7 +16,8 @@ namespace ConsoleCourceWork.Interfaces
         IWard Ward { get; }
         int BedNumber { get; }
         DateTime AdmissionDate { get; }
-        DateTime? DischargeDate { get; } // Добавляем
+        DateTime? DischargeDate { get; }
+        IMedicalStaff AttendingDoctor { get; set; } // ДОБАВИЛИ ВРАЧА
         bool IsActive { get; }
     }
 }

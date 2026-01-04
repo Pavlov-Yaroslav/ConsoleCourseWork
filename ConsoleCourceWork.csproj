@@ -43,23 +43,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enum\AcademicDegree.cs" />
+    <Compile Include="Enum\AcademicTitle.cs" />
+    <Compile Include="Enum\MedicalSpecialization.cs" />
     <Compile Include="Enum\SpecializationDep.cs" />
     <Compile Include="Interfaces\IBuilding.cs" />
     <Compile Include="Interfaces\IDepartment.cs" />
     <Compile Include="Interfaces\IDiagnosis.cs" />
     <Compile Include="Interfaces\IHospital.cs" />
+    <Compile Include="Interfaces\IMedicalStaff.cs" />
     <Compile Include="Interfaces\IMedInstitution.cs" />
+    <Compile Include="Interfaces\IOperatingStaff.cs" />
     <Compile Include="Interfaces\IPatient.cs" />
     <Compile Include="Interfaces\IPatientPlacement.cs" />
+    <Compile Include="Interfaces\IStaff.cs" />
+    <Compile Include="Interfaces\IStaffPlacement.cs" />
     <Compile Include="Interfaces\ITreatmentRecord.cs" />
     <Compile Include="Interfaces\IWard.cs" />
     <Compile Include="Models\Building.cs" />
+    <Compile Include="Models\Cardiologist.cs" />
     <Compile Include="Models\Department.cs" />
     <Compile Include="Models\Diagnosis.cs" />
     <Compile Include="Models\Hospital.cs" />
     <Compile Include="Models\IdGenerator.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\PatientPlacement.cs" />
+    <Compile Include="Models\StaffPlacement.cs" />
+    <Compile Include="Models\Surgeon.cs" />
+    <Compile Include="Models\Therapist.cs" />
     <Compile Include="Models\TreatmentRecord.cs" />
     <Compile Include="Models\Ward.cs" />
     <Compile Include="Program.cs" />
