@@ -58,10 +58,15 @@ namespace ConsoleCourceWork
             Console.WriteLine("\n[Часть 2: Операции внутри одной поликлиники]");
             DemonstrateClinicOperations();
 
+            // 3. Демонстрация оптимизированной архитектуры больницы
+            Console.WriteLine("\n[Часть 3: Оптимизированная архитектура больницы]");
+            DemonstrateRefactoredHospital();
+
             Console.WriteLine("\nНажмите любую клавишу для выхода...");
             Console.ReadKey();
         }
 
+        // СУЩЕСТВУЮЩИЕ МЕТОДЫ (остаются без изменений)
         static void SetupHospitalInfrastructure(Hospital hospital)
         {
             Console.WriteLine("Настройка инфраструктуры больницы...");
@@ -127,23 +132,23 @@ namespace ConsoleCourceWork
             var therapist2 = new Therapist("T002", "Сидорова", "Ольга", "Александровна",
                 "LIC-THER-002", 75000);
 
-            // Создаем и нанимаем кардиолога (теперь настоящий кардиолог!)
+            // Создаем и нанимаем кардиолога
             var cardiologist = new Cardiologist("C001", "Кузнецов", "Андрей", "Михайлович",
                 "LIC-CARD-001", 110000);
             cardiologist.SetAcademicDegree(AcademicDegree.CandidateOfMedicalSciences);
 
             // Принимаем на работу и распределяем по отделениям
-            hospital.HireStaff(surgeon1, surgeryDept);
-            hospital.HireStaff(surgeon2, surgeryDept);
-            hospital.HireStaff(therapist1, therapyDept);
-            hospital.HireStaff(therapist2, therapyDept);
-            hospital.HireStaff(cardiologist, cardioDept); // Кардиолог в кардиологию!
+            hospital.StaffService.HireStaff(surgeon1, surgeryDept);
+            hospital.StaffService.HireStaff(surgeon2, surgeryDept);
+            hospital.StaffService.HireStaff(therapist1, therapyDept);
+            hospital.StaffService.HireStaff(therapist2, therapyDept);
+            hospital.StaffService.HireStaff(cardiologist, cardioDept);
 
-            Console.WriteLine($"\n✓ Персонал нанят: {hospital.GetActiveStaff().Count} сотрудников");
+            Console.WriteLine($"\n✓ Персонал нанят: {hospital.StaffService.GetActiveStaff().Count} сотрудников");
             Console.WriteLine("  Распределение:");
-            Console.WriteLine($"    Хирурги: {hospital.GetStaffByDepartment(surgeryDept).Count}");
-            Console.WriteLine($"    Кардиологи: {hospital.GetStaffByDepartment(cardioDept).Count}");
-            Console.WriteLine($"    Терапевты: {hospital.GetStaffByDepartment(therapyDept).Count}");
+            Console.WriteLine($"    Хирурги: {hospital.StaffService.GetStaffByDepartment(surgeryDept).Count}");
+            Console.WriteLine($"    Кардиологи: {hospital.StaffService.GetStaffByDepartment(cardioDept).Count}");
+            Console.WriteLine($"    Терапевты: {hospital.StaffService.GetStaffByDepartment(therapyDept).Count}");
         }
 
         static (Patient patient1, Patient patient2, Patient patient3, Patient patient4) RegisterPatients(Hospital hospital)
@@ -158,7 +163,7 @@ namespace ConsoleCourceWork
 
             Console.WriteLine($"Пациент: {patient1.Surname} {patient1.Name}");
             Console.WriteLine($"Диагноз: {diagnosis1.Name}");
-            var placement1 = hospital.AdmitPatient(patient1, diagnosis1);
+            var placement1 = hospital.PatientService.AdmitPatient(patient1, diagnosis1);
 
             // Пациент 2 - кардиологический
             var patient2 = new Patient("P002", "Васильева", "Елена", "Петровна",
@@ -168,7 +173,7 @@ namespace ConsoleCourceWork
 
             Console.WriteLine($"\nПациент: {patient2.Surname} {patient2.Name}");
             Console.WriteLine($"Диагноз: {diagnosis2.Name}");
-            var placement2 = hospital.AdmitPatient(patient2, diagnosis2);
+            var placement2 = hospital.PatientService.AdmitPatient(patient2, diagnosis2);
 
             // Пациент 3 - терапевтический
             var patient3 = new Patient("P003", "Козлов", "Дмитрий", "Сергеевич",
@@ -178,9 +183,9 @@ namespace ConsoleCourceWork
 
             Console.WriteLine($"\nПациент: {patient3.Surname} {patient3.Name}");
             Console.WriteLine($"Диагноз: {diagnosis3.Name}");
-            var placement3 = hospital.AdmitPatient(patient3, diagnosis3);
+            var placement3 = hospital.PatientService.AdmitPatient(patient3, diagnosis3);
 
-            // Пациент 4 - еще один хирургический (проверим распределение нагрузки)
+            // Пациент 4 - еще один хирургический
             var patient4 = new Patient("P004", "Николаев", "Сергей", "Андреевич",
                 new DateTime(1990, 4, 18), "INS00456789012");
             var diagnosis4 = new Diagnosis("K35", "Острый аппендицит",
@@ -188,7 +193,7 @@ namespace ConsoleCourceWork
 
             Console.WriteLine($"\nПациент: {patient4.Surname} {patient4.Name}");
             Console.WriteLine($"Диагноз: {diagnosis4.Name}");
-            var placement4 = hospital.AdmitPatient(patient4, diagnosis4);
+            var placement4 = hospital.PatientService.AdmitPatient(patient4, diagnosis4);
 
             return (patient1, patient2, patient3, patient4);
         }
@@ -205,8 +210,8 @@ namespace ConsoleCourceWork
                 Console.WriteLine($"\nЗдание: {building.Name}");
                 foreach (var department in building.Departments)
                 {
-                    var staffCount = hospital.GetStaffByDepartment(department).Count;
-                    var patientCount = hospital.GetActivePlacements()
+                    var staffCount = hospital.StaffService.GetStaffByDepartment(department).Count;
+                    var patientCount = hospital.PatientService.GetActivePlacements()
                         .Count(p => p.Department == department);
                     var availableBeds = GetAvailableBeds(department);
 
@@ -218,7 +223,7 @@ namespace ConsoleCourceWork
             }
 
             Console.WriteLine("\n--- Активные пациенты ---");
-            var activePatients = hospital.GetActivePlacements();
+            var activePatients = hospital.PatientService.GetActivePlacements();
             if (activePatients.Count == 0)
             {
                 Console.WriteLine("Нет пациентов в больнице.");
@@ -256,67 +261,56 @@ namespace ConsoleCourceWork
             {
                 foreach (var department in building.Departments)
                 {
-                    hospital.PrintDepartmentStaff(department);
+                    var staffList = hospital.StaffService.GetStaffByDepartment(department);
+                    Console.WriteLine($"\nОтделение: {department.Name}");
+
+                    if (!staffList.Any())
+                    {
+                        Console.WriteLine("  В отделении нет персонала");
+                        continue;
+                    }
+
+                    foreach (var placement in staffList)
+                    {
+                        var staff = placement.Staff;
+                        if (staff is IMedicalStaff medicalStaff)
+                        {
+                            var patientCount = hospital.PatientService.GetActivePlacements()
+                                .Count(p => p.AttendingDoctor == medicalStaff);
+                            Console.WriteLine($"  - {medicalStaff.Specialization}: {staff.Surname} {staff.Name} ({patientCount} пациентов)");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"  - {staff.Surname} {staff.Name}");
+                        }
+                    }
                 }
             }
 
-            // Создаем и нанимаем нового врача в середине работы
+            // Создаем и нанимаем нового врача
             Console.WriteLine("\n--- Прием на работу нового врача ---");
             var newSurgeon = new Surgeon("S003", "Волков", "Михаил", "Анатольевич",
                 "LIC-SURG-003", 100000);
             newSurgeon.UpdateOpStats(50, 0);
 
             var surgeryDept = hospital.Buildings[0].Departments[0];
-            hospital.HireStaff(newSurgeon, surgeryDept);
-
-            // Пытаемся уволить хирурга, у которого есть пациенты
-            Console.WriteLine("\n--- Попытка уволить врача с пациентами ---");
-            var surgeonWithPatients = hospital.GetActiveStaff()
-                .FirstOrDefault(sp => sp.Staff is Surgeon &&
-                                     hospital.GetPatientsByDoctor(sp.Staff as IMedicalStaff).Count > 0);
-
-            if (surgeonWithPatients != null)
-            {
-                Console.WriteLine($"Попытка уволить {surgeonWithPatients.Staff.Surname} " +
-                                $"(пациентов: {hospital.GetPatientsByDoctor(surgeonWithPatients.Staff as IMedicalStaff).Count})");
-
-                // Показываем, что система должна предотвратить это
-                // (в реальной системе нужно добавить проверку в DismissStaff)
-                hospital.DismissStaff(surgeonWithPatients.Staff);
-            }
+            hospital.StaffService.HireStaff(newSurgeon, surgeryDept);
 
             // Увольнение сотрудника без пациентов
             Console.WriteLine("\n--- Увольнение сотрудника без пациентов ---");
-            var staffWithoutPatients = hospital.GetActiveStaff()
-                .FirstOrDefault(sp => hospital.GetPatientsByDoctor(sp.Staff as IMedicalStaff).Count == 0);
+            var staffWithoutPatients = hospital.StaffService.GetActiveStaff()
+                .FirstOrDefault(sp => sp.Staff is IMedicalStaff medicalStaff &&
+                                     hospital.PatientService.GetActivePlacements()
+                                         .Count(p => p.AttendingDoctor == medicalStaff) == 0);
 
             if (staffWithoutPatients != null)
             {
                 Console.WriteLine($"Увольняем {staffWithoutPatients.Staff.Surname} (нет пациентов)");
-                hospital.DismissStaff(staffWithoutPatients.Staff);
-            }
-
-            // Перемещение сотрудника между отделениями (настоящее перемещение)
-            Console.WriteLine("\n--- Перемещение сотрудника между отделениями ---");
-            var staffToMove = hospital.GetActiveStaff()
-                .Where(sp => sp.Department != null &&
-                            sp.Staff is IMedicalStaff &&
-                            sp.Department.Name.Contains("Терапевтическое"))
-                .FirstOrDefault();
-
-            if (staffToMove != null)
-            {
-                var newDepartment = hospital.Buildings[0].Departments[1]; // Кардиологическое отделение
-                var oldDeptName = staffToMove.Department?.Name ?? "не назначен";
-
-                Console.WriteLine($"Перемещаем {(staffToMove.Staff as IMedicalStaff)?.Specialization} " +
-                                $"{staffToMove.Staff.Surname} из {oldDeptName} в {newDepartment.Name}");
-                hospital.AssignStaffToDepartment(staffToMove.Staff, newDepartment);
+                hospital.StaffService.DismissStaff(staffWithoutPatients.Staff);
             }
 
             Console.WriteLine("\n--- Итоговая статистика персонала ---");
-            Console.WriteLine($"Работает: {hospital.GetActiveStaff().Count} человек");
-            Console.WriteLine($"Уволено: {hospital.GetDismissedStaff().Count} человек");
+            Console.WriteLine($"Работает: {hospital.StaffService.GetActiveStaff().Count} человек");
         }
 
         static void DemonstrateDoctorAssignment(Hospital hospital,
@@ -326,11 +320,13 @@ namespace ConsoleCourceWork
 
             // Показываем врачей и их пациентов
             Console.WriteLine("Врачи и их пациенты:");
-            foreach (var staffPlacement in hospital.GetActiveStaff())
+            foreach (var staffPlacement in hospital.StaffService.GetActiveStaff())
             {
                 if (staffPlacement.Staff is IMedicalStaff doctor)
                 {
-                    var doctorPatients = hospital.GetPatientsByDoctor(doctor);
+                    var doctorPatients = hospital.PatientService.GetActivePlacements()
+                        .Where(p => p.AttendingDoctor == doctor)
+                        .ToList();
 
                     if (doctor is Surgeon surgeon)
                     {
@@ -357,33 +353,13 @@ namespace ConsoleCourceWork
 
             // Выписываем пациента и проверяем историю болезней
             Console.WriteLine("\n--- Выписка пациента и создание истории болезней ---");
-            hospital.DischargePatient(patients.p1);
+            hospital.PatientService.DischargePatient(patients.p1);
 
             Console.WriteLine($"\nИстория болезней пациента {patients.p1.Surname}:");
             foreach (var record in patients.p1.TreatmentHistory)
             {
                 Console.WriteLine($"- #{record.ID}: {record.Diagnoses.First().Name} " +
                                 $"({record.StartDate:dd.MM.yyyy} - {record.EndDate:dd.MM.yyyy})");
-            }
-
-            // Пытаемся зарегистрировать уже госпитализированного пациента
-            Console.WriteLine("\n--- Попытка повторной госпитализации ---");
-            var diagnosis = new Diagnosis("K40", "Паховая грыжа",
-                "Паховая грыжа без осложнений", SpecializationDep.SurgicalDep);
-            hospital.AdmitPatient(patients.p2, diagnosis);
-
-            // Проверяем уникальность ID в истории болезней
-            Console.WriteLine("\n--- Проверка уникальности ID записей ---");
-            var allPatients = hospital.PatientPlacements.Keys.ToList();
-            var allRecords = allPatients.SelectMany(p => p.TreatmentHistory).ToList();
-            var uniqueIds = allRecords.Select(r => r.ID).Distinct().Count();
-
-            Console.WriteLine($"Всего записей в истории болезней: {allRecords.Count}");
-            Console.WriteLine($"Уникальных ID: {uniqueIds}");
-
-            if (uniqueIds == allRecords.Count)
-            {
-                Console.WriteLine("✓ Все ID уникальны!");
             }
         }
 
@@ -392,27 +368,26 @@ namespace ConsoleCourceWork
         {
             Console.WriteLine("\n=== ДОПОЛНИТЕЛЬНЫЕ ВОЗМОЖНОСТИ СИСТЕМЫ ===\n");
 
-            // 1. Назначение другого врача существующему пациенту
+            // 1. Переназначение врача существующему пациенту
             Console.WriteLine("1. Переназначение врача пациенту:");
 
             // Проверяем, что пациент p3 еще в больнице
-            if (hospital.PatientPlacements.ContainsKey(patients.p3) &&
-                hospital.PatientPlacements[patients.p3].IsActive)
-            {
-                var placement = hospital.PatientPlacements[patients.p3];
+            var p3Placement = hospital.PatientService.GetPatientPlacement(patients.p3);
 
-                if (placement.AttendingDoctor != null)
+            if (p3Placement != null && p3Placement.IsActive)
+            {
+                if (p3Placement.AttendingDoctor != null)
                 {
                     Console.WriteLine($"Пациент: {patients.p3.Surname}");
-                    Console.WriteLine($"Текущий врач: {placement.AttendingDoctor.Specialization} {placement.AttendingDoctor.Surname}");
+                    Console.WriteLine($"Текущий врач: {p3Placement.AttendingDoctor.Specialization} {p3Placement.AttendingDoctor.Surname}");
                     Console.WriteLine($"Ищем другого врача той же специализации...");
 
                     // Ищем другого врача той же специализации в том же отделении
-                    var otherDoctors = hospital.GetStaffByDepartment(placement.Department)
+                    var otherDoctors = hospital.StaffService.GetStaffByDepartment(p3Placement.Department)
                         .Where(sp => sp.Staff is IMedicalStaff medicalStaff &&
                                     medicalStaff.IsActive &&
-                                    medicalStaff != placement.AttendingDoctor &&
-                                    medicalStaff.Specialization == placement.AttendingDoctor.Specialization)
+                                    medicalStaff != p3Placement.AttendingDoctor &&
+                                    medicalStaff.Specialization == p3Placement.AttendingDoctor.Specialization)
                         .Select(sp => sp.Staff as IMedicalStaff)
                         .ToList();
 
@@ -422,20 +397,23 @@ namespace ConsoleCourceWork
                         Console.WriteLine($"Найден врач: {newDoctor.Specialization} {newDoctor.Surname}");
 
                         // Сохраняем старого врача для истории
-                        var oldDoctor = placement.AttendingDoctor;
-                        placement.AttendingDoctor = newDoctor;
+                        var oldDoctor = p3Placement.AttendingDoctor;
+                        p3Placement.AttendingDoctor = newDoctor;
 
                         Console.WriteLine($"✓ Врач переназначен: {oldDoctor.Surname} → {newDoctor.Surname}");
 
                         // Показываем текущее распределение
-                        var oldDoctorPatients = hospital.GetPatientsByDoctor(oldDoctor).Count;
-                        var newDoctorPatients = hospital.GetPatientsByDoctor(newDoctor).Count;
+                        var oldDoctorPatients = hospital.PatientService.GetActivePlacements()
+                            .Count(p => p.AttendingDoctor == oldDoctor);
+                        var newDoctorPatients = hospital.PatientService.GetActivePlacements()
+                            .Count(p => p.AttendingDoctor == newDoctor);
+
                         Console.WriteLine($"  Теперь у {oldDoctor.Surname}: {oldDoctorPatients} пациентов");
                         Console.WriteLine($"  Теперь у {newDoctor.Surname}: {newDoctorPatients} пациентов");
                     }
                     else
                     {
-                        Console.WriteLine($"  Не найден другой {placement.AttendingDoctor.Specialization} в отделении {placement.Department.Name}");
+                        Console.WriteLine($"  Не найден другой {p3Placement.AttendingDoctor.Specialization} в отделении {p3Placement.Department.Name}");
                     }
                 }
                 else
@@ -457,19 +435,22 @@ namespace ConsoleCourceWork
 
             Console.WriteLine($"Диагноз: {testDiagnosis.Name} ({testDiagnosis.RequiredSpecialization})");
 
-            // Ищем именно в кардиологическом отделении
+            // Ищем в кардиологическом отделении
             var cardioDept = hospital.Buildings[0].Departments
                 .First(d => d.Specialization == SpecializationDep.CardiologyDep);
 
-            var foundDoctor = hospital.FindDoctorForPatient(cardioDept, testDiagnosis.RequiredSpecialization);
+            var foundDoctor = hospital.StaffService.FindDoctorForPatient(
+                cardioDept,
+                testDiagnosis.RequiredSpecialization,
+                hospital.PatientService);
 
             if (foundDoctor != null)
             {
                 Console.WriteLine($"Найден врач: {foundDoctor.Specialization} {foundDoctor.Surname}");
-                var doctorPatients = hospital.GetPatientsByDoctor(foundDoctor);
-                Console.WriteLine($"У него уже {doctorPatients.Count} пациентов");
+                var doctorPatients = hospital.PatientService.GetActivePlacements()
+                    .Count(p => p.AttendingDoctor == foundDoctor);
+                Console.WriteLine($"У него уже {doctorPatients} пациентов");
 
-                // Показываем информацию о враче
                 if (foundDoctor is Cardiologist cardiologist)
                 {
                     Console.WriteLine($"  Это кардиолог (должно быть верно)");
@@ -486,7 +467,7 @@ namespace ConsoleCourceWork
 
             // 3. Статистика хирургов (только активных!)
             Console.WriteLine("\n3. Статистика активных хирургов:");
-            var activeSurgeons = hospital.GetActiveStaff()
+            var activeSurgeons = hospital.StaffService.GetActiveStaff()
                 .Where(sp => sp.Staff is Surgeon)
                 .Select(sp => sp.Staff as Surgeon)
                 .ToList();
@@ -496,7 +477,8 @@ namespace ConsoleCourceWork
                 Console.WriteLine($"Активных хирургов: {activeSurgeons.Count}");
                 foreach (var surgeon in activeSurgeons)
                 {
-                    var patientsCount = hospital.GetPatientsByDoctor(surgeon).Count;
+                    var patientsCount = hospital.PatientService.GetActivePlacements()
+                        .Count(p => p.AttendingDoctor == surgeon);
                     Console.WriteLine($"  {surgeon.Surname}: {surgeon.GetOperationStats()}, пациентов: {patientsCount}");
                 }
             }
@@ -505,24 +487,9 @@ namespace ConsoleCourceWork
                 Console.WriteLine("Нет активных хирургов");
             }
 
-            // Показываем уволенных хирургов отдельно
-            var dismissedSurgeons = hospital.GetDismissedStaff()
-                .Where(sp => sp.Staff is Surgeon)
-                .Select(sp => sp.Staff as Surgeon)
-                .ToList();
-
-            if (dismissedSurgeons.Any())
-            {
-                Console.WriteLine($"\nУволенных хирургов: {dismissedSurgeons.Count}");
-                foreach (var surgeon in dismissedSurgeons)
-                {
-                    Console.WriteLine($"  {surgeon.Surname} (уволен)");
-                }
-            }
-
             // 4. Выписка всех пациентов
             Console.WriteLine("\n4. Массовая выписка пациентов:");
-            var activePatients = hospital.GetActivePlacements().ToList();
+            var activePatients = hospital.PatientService.GetActivePlacements().ToList();
 
             if (activePatients.Any())
             {
@@ -532,11 +499,11 @@ namespace ConsoleCourceWork
                 foreach (var patientPlacement in patientsToDischarge)
                 {
                     Console.WriteLine($"  Выписываем: {patientPlacement.Patient.Surname}");
-                    hospital.DischargePatient(patientPlacement.Patient);
+                    hospital.PatientService.DischargePatient(patientPlacement.Patient);
                 }
 
                 Console.WriteLine($"Выписано: {patientsToDischarge.Count} пациентов");
-                Console.WriteLine($"Осталось в больнице: {hospital.GetActivePlacements().Count}");
+                Console.WriteLine($"Осталось в больнице: {hospital.PatientService.GetActivePlacements().Count}");
             }
             else
             {
@@ -555,7 +522,7 @@ namespace ConsoleCourceWork
 
             foreach (var spec in specializations)
             {
-                var doctorsOfSpec = hospital.GetActiveStaff()
+                var doctorsOfSpec = hospital.StaffService.GetActiveStaff()
                     .Where(sp => sp.Staff is IMedicalStaff medicalStaff &&
                                 medicalStaff.Specialization == spec)
                     .Select(sp => sp.Staff as IMedicalStaff)
@@ -566,12 +533,43 @@ namespace ConsoleCourceWork
                     Console.WriteLine($"  {spec}: {doctorsOfSpec.Count} врачей");
                     foreach (var doctor in doctorsOfSpec)
                     {
-                        var patientCount = hospital.GetPatientsByDoctor(doctor).Count;
+                        var patientCount = hospital.PatientService.GetActivePlacements()
+                            .Count(p => p.AttendingDoctor == doctor);
                         Console.WriteLine($"    - {doctor.Surname} ({patientCount} пациентов)");
                     }
                 }
             }
+
+            // 6. Демонстрация работы с сервисами
+            Console.WriteLine("\n6. Сводная статистика через сервисы:");
+
+            hospital.PatientService.PrintPatientStatistics();
+            hospital.StaffService.PrintStaffStatistics();
+
+            // 7. Проверка уникальности ID в истории болезней
+            Console.WriteLine("\n7. Проверка уникальности ID записей в истории болезней:");
+            var allPatients = hospital.PatientService.GetActivePlacements()
+                .Select(p => p.Patient)
+                .Concat(hospital.PatientService.GetDischargedPatients()
+                        .Select(p => p.Patient))
+                .Distinct()
+                .ToList();
+
+            var allRecords = allPatients.SelectMany(p => p.TreatmentHistory).ToList();
+            var uniqueIds = allRecords.Select(r => r.ID).Distinct().Count();
+
+            Console.WriteLine($"Всего записей в истории болезней: {allRecords.Count}");
+            Console.WriteLine($"Уникальных ID: {uniqueIds}");
+
+            if (uniqueIds == allRecords.Count)
+            {
+                Console.WriteLine("✓ Все ID уникальны!");
+            }
+
+            Console.WriteLine("\n✓ Дополнительные возможности системы продемонстрированы!");
         }
+
+        // НОВЫЕ МЕТОДЫ ДЛЯ ДЕМОНСТРАЦИИ ПОЛИКЛИНИК
 
         static void DemonstrateClinicAttachment(Hospital existingHospital)
         {
@@ -589,11 +587,11 @@ namespace ConsoleCourceWork
             // Создаем поликлиники
             var clinics = new[]
             {
-        new Clinic("C001", "Поликлиника №1", "ул. Центральная, 10"),
-        new Clinic("C002", "Детская поликлиника", "ул. Школьная, 15"),
-        new Clinic("C003", "Стоматологическая поликлиника", "ул. Зубная, 3"),
-        new Clinic("C004", "Женская консультация", "ул. Гинекологическая, 7")
-    };
+                new Clinic("C001", "Поликлиника №1", "ул. Центральная, 10"),
+                new Clinic("C002", "Детская поликлиника", "ул. Школьная, 15"),
+                new Clinic("C003", "Стоматологическая поликлиника", "ул. Зубная, 3"),
+                new Clinic("C004", "Женская консультация", "ул. Гинекологическая, 7")
+            };
 
             Console.WriteLine("\n1. Прикрепляем поликлиники к больницам:");
 
@@ -601,7 +599,7 @@ namespace ConsoleCourceWork
             attachmentService.AttachClinicToHospital(clinics[0], polyclinicHospital);
             attachmentService.AttachClinicToHospital(clinics[1], polyclinicHospital);
 
-            // Поликлиника 3 к существующей больнице (из параметра)
+            // Поликлиника 3 к существующей больнице
             attachmentService.AttachClinicToHospital(clinics[2], existingHospital);
 
             Console.WriteLine("\n2. Выводим все прикрепления:");
@@ -624,29 +622,6 @@ namespace ConsoleCourceWork
 
             Console.WriteLine("\n6. Финальный статус прикреплений:");
             attachmentService.PrintAllAttachments();
-
-            Console.WriteLine("\n7. Пробуем создать направление пациента (демонстрация связи):");
-            try
-            {
-                // Создаем тестового пациента
-                var testPatient = new Patient(
-                    "P999",
-                    "Иванов",
-                    "Иван",
-                    "Иванович",
-                    new DateTime(1980, 5, 15),
-                    "INS999999999");
-
-                // Регистрируем пациента в поликлинике
-                // (если бы у Clinic был такой метод)
-                Console.WriteLine($"Пациент {testPatient.Surname} может быть направлен из {clinics[0].Name} в {clinics[0].AttachedHospital.Name}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Примечание: {ex.Message}");
-            }
-
-            Console.WriteLine("\n✓ Демонстрация работы с поликлиниками завершена!");
         }
 
         static void DemonstrateClinicOperations()
@@ -734,6 +709,62 @@ namespace ConsoleCourceWork
             attachmentService.PrintAllAttachments();
 
             Console.WriteLine("\n✓ Демонстрация работы поликлиники завершена!");
+        }
+
+        static void DemonstrateRefactoredHospital()
+        {
+            Console.WriteLine("\n=== ДЕМОНСТРАЦИЯ ОПТИМИЗИРОВАННОЙ БОЛЬНИЦЫ ===\n");
+
+            // Создаем больницу
+            var hospital = new Hospital("H100", "Оптимизированная больница", "ул. Оптимизационная, 1");
+
+            // Добавляем инфраструктуру
+            var building = new Building("B100", "Главный корпус", "ул. Оптимизационная, 1");
+            var department = new Department("D100", "Терапевтическое", SpecializationDep.GeneralMedicineDep);
+            department.AddWard(new Ward(101, 5));
+            building.AddDepartment(department);
+            hospital.AddBuilding(building);
+
+            Console.WriteLine("1. Создана больница с сервисами:");
+            Console.WriteLine(hospital);
+
+            Console.WriteLine("\n2. Нанимаем персонал через StaffService:");
+            var therapist = new Therapist("T100", "Сергеев", "Андрей", "Владимирович",
+                                         "LIC-THER-100", 80000);
+            hospital.StaffService.HireStaff(therapist, department);
+
+            Console.WriteLine("\n3. Принимаем пациентов через PatientService:");
+            var patient = new Patient("P100", "Ковалев", "Дмитрий", "Игоревич",
+                                     new DateTime(1985, 5, 10), "INS100100100");
+            var diagnosis = new Diagnosis("J06", "ОРВИ", "Острая респираторная вирусная инфекция",
+                                         SpecializationDep.GeneralMedicineDep);
+
+            var placement = hospital.PatientService.AdmitPatient(patient, diagnosis);
+
+            // Назначаем врача
+            if (placement != null)
+            {
+                var doctor = hospital.StaffService.FindDoctorForPatient(department,
+                    diagnosis.RequiredSpecialization, hospital.PatientService);
+
+                if (doctor != null)
+                {
+                    placement.AttendingDoctor = doctor;
+                    Console.WriteLine($"Назначен врач: {doctor.Surname} {doctor.Name}");
+                }
+            }
+
+            Console.WriteLine("\n4. Статистика через сервисы:");
+            hospital.PatientService.PrintPatientStatistics();
+            hospital.StaffService.PrintStaffStatistics();
+
+            Console.WriteLine("\n5. Выписываем пациента:");
+            hospital.PatientService.DischargePatient(patient);
+
+            Console.WriteLine("\n6. Финальная статистика:");
+            hospital.PatientService.PrintPatientStatistics();
+
+            Console.WriteLine("\n✓ Демонстрация оптимизированной архитектуры завершена!");
         }
     }
 }
