@@ -7,7 +7,7 @@ using ConsoleCourceWork.Interfaces;
 
 namespace ConsoleCourceWork.Models
 {
-    public class Clinic : IClinic
+    public class Clinic : IClinic, IMedInstitutClient
     {
         // IClinic properties
         public string Name { get; }

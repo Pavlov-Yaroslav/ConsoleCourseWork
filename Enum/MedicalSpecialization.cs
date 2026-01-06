@@ -9,11 +9,12 @@ public enum MedicalSpecialization
     Surgeon,
     Therapist,
     Neurologist,
-    Cardiologist,   // Есть!
+    Cardiologist,
     Pediatrician,
     Radiologist,
     Dentist,
     Ophthalmologist,
     Otolaryngologist,
-    GeneralMedicine // Добавляем для полноты
+    GeneralMedicine,
+    LaboratoryAssistant
 }

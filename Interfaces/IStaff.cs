@@ -19,5 +19,7 @@ namespace ConsoleCourceWork.Interfaces
 
         void UpdateSalary(decimal newSalary);
         void UpdateVacationDays(int newVacationDays);
+        void AddWorkplace(IMedInstitution institution); // ДОБАВЛЯЕМ
+        void RemoveWorkplace(IMedInstitution institution); // ДОБАВЛЯЕМ
     }
 }

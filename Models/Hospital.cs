@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace ConsoleCourceWork.Models
 {
-    public class Hospital : IMedInstitution
+    public class Hospital : IMedInstitution, IMedInstitutClient
     {
         public string Name { get; private set; }
         public string Address { get; private set; }

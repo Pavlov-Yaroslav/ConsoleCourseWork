@@ -46,16 +46,20 @@
     <Compile Include="Enum\AcademicDegree.cs" />
     <Compile Include="Enum\AcademicTitle.cs" />
     <Compile Include="Enum\HazardType.cs" />
+    <Compile Include="Enum\LabProfileType.cs" />
     <Compile Include="Enum\MedicalSpecialization.cs" />
     <Compile Include="Enum\SpecializationDep.cs" />
     <Compile Include="Enum\SupportSpecialization.cs" />
     <Compile Include="Interfaces\IBuilding.cs" />
     <Compile Include="Interfaces\IClinic.cs" />
+    <Compile Include="Interfaces\IContract.cs" />
     <Compile Include="Interfaces\IDepartment.cs" />
     <Compile Include="Interfaces\IDiagnosis.cs" />
     <Compile Include="Interfaces\IHazardWorkStaff.cs" />
     <Compile Include="Interfaces\IHospital.cs" />
+    <Compile Include="Interfaces\ILaboratory.cs" />
     <Compile Include="Interfaces\IMedicalStaff.cs" />
+    <Compile Include="Interfaces\IMedInstitutClient.cs" />
     <Compile Include="Interfaces\IMedInstitution.cs" />
     <Compile Include="Interfaces\IOperatingStaff.cs" />
     <Compile Include="Interfaces\IPatient.cs" />
@@ -68,10 +72,13 @@
     <Compile Include="Models\Building.cs" />
     <Compile Include="Models\Cardiologist.cs" />
     <Compile Include="Models\Clinic.cs" />
+    <Compile Include="Models\Contract.cs" />
     <Compile Include="Models\Department.cs" />
     <Compile Include="Models\Diagnosis.cs" />
     <Compile Include="Models\Hospital.cs" />
     <Compile Include="Models\IdGenerator.cs" />
+    <Compile Include="Models\Laboratory.cs" />
+    <Compile Include="Models\LaboratoryAssistant.cs" />
     <Compile Include="Models\Nurse.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\PatientPlacement.cs" />
@@ -84,6 +91,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ClinicAttachmentService.cs" />
+    <Compile Include="Services\ContractManager.cs" />
     <Compile Include="Services\PatientManagementService.cs" />
     <Compile Include="Services\StaffManagementService.cs" />
   </ItemGroup>
