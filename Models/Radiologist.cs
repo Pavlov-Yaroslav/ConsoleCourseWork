@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 
 namespace ConsoleCourceWork.Models
 {
-    public class Surgeon : IStaff, IMedicalStaff, IOperatingStaff
+    public class Radiologist : IStaff, IMedicalStaff, IOperatingStaff, IHazardWorkStaff
     {
         // IStaff properties
+        public string ID { get; }
         public string Name { get; }
         public string Surname { get; }
         public string Patronymic { get; }
         public decimal Salary { get; private set; }
         public bool IsActive { get; set; }
-        public List<IMedInstitution> Workplaces { get; }
-        public string ID { get; }
         public int VacationDays { get; private set; }
+        public List<IMedInstitution> Workplaces { get; }
 
         // IMedicalStaff properties
         public MedicalSpecialization Specialization { get; }
@@ -38,38 +38,48 @@ namespace ConsoleCourceWork.Models
             }
         }
 
-        public Surgeon(string id, string surname, string name, string patronymic,
-                      string licenseNumber, decimal initialSalary)
+        // IHazardWorkStaff properties
+        public decimal HazardCoefficient { get; }
+        public HazardType HazardType { get; }
+
+        public Radiologist(string id, string surname, string name, string patronymic,
+                          string licenseNumber, decimal initialSalary)
         {
             ID = id;
             Surname = surname;
             Name = name;
             Patronymic = patronymic;
-            Specialization = MedicalSpecialization.Surgeon;
+            Specialization = MedicalSpecialization.Radiologist;
             LicenseNumber = licenseNumber;
             Salary = initialSalary;
             IsActive = true;
             Workplaces = new List<IMedInstitution>();
-            VacationDays = 28;
+            VacationDays = 28; // Базовое значение
             AcademicDegree = AcademicDegree.None;
             AcademicTitle = AcademicTitle.None;
             CompletedOperations = 0;
             FatalOperations = 0;
+            HazardCoefficient = 1.4m; // Коэффициент для радиологов
+            HazardType = HazardType.RadiationExposure;
         }
 
-        // IStaff methods
+        // IStaff methods (с учетом коэффициента опасности)
         public void UpdateSalary(decimal newSalary)
         {
             if (newSalary < 0)
                 throw new ArgumentException("Зарплата не может быть отрицательной");
-            Salary = newSalary;
+
+            // Применяем коэффициент опасности
+            Salary = newSalary * HazardCoefficient;
         }
 
         public void UpdateVacationDays(int newVacationDays)
         {
             if (newVacationDays < 0)
                 throw new ArgumentException("Дни отпуска не могут быть отрицательными");
-            VacationDays = newVacationDays;
+
+            // Применяем коэффициент опасности
+            VacationDays = (int)(newVacationDays * HazardCoefficient);
         }
 
         public void AddWorkplace(IMedInstitution institution)
@@ -95,8 +105,7 @@ namespace ConsoleCourceWork.Models
 
         public bool CanCureDiagnosis(SpecializationDep specialization)
         {
-            // Хирург может лечить только хирургические диагнозы
-            return specialization == SpecializationDep.SurgicalDep;
+            return specialization == SpecializationDep.XrayDep;
         }
 
         // Дополнительные методы
@@ -151,19 +160,19 @@ namespace ConsoleCourceWork.Models
 
         public string GetOperationStats()
         {
-            return $"Операций: {CompletedOperations}, Успешных: {SuccessRate}%";
+            return $"Рентгеновских исследований: {CompletedOperations}, Успешных: {SuccessRate}%";
         }
 
         public override string ToString()
         {
             string degree = AcademicDegree != AcademicDegree.None ? $"{AcademicDegree} " : "";
             string title = AcademicTitle != AcademicTitle.None ? $"{AcademicTitle} " : "";
-            return $"{degree}{title}{Surname} {Name} {Patronymic} - {Specialization} (ID: {ID})";
+            return $"{degree}{title}{Surname} {Name} {Patronymic} - {Specialization} (Опасная работа, коэффициент: {HazardCoefficient})";
         }
 
         public override bool Equals(object obj)
         {
-            return obj is Surgeon surgeon && ID == surgeon.ID;
+            return obj is Radiologist radiologist && ID == radiologist.ID;
         }
 
         public override int GetHashCode()

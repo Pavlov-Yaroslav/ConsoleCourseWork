@@ -8,106 +8,170 @@ using ConsoleCourceWork.Models;
 
 namespace ConsoleCourceWork.Services
 {
-    public class ClinicAttachmentService
+    public class ClinicAttachmentManager
     {
-        private readonly Dictionary<Clinic, Hospital> _attachments;
+        // Центральное хранилище всех связей
+        private readonly Dictionary<Clinic, Hospital> _clinicToHospital = new Dictionary<Clinic, Hospital>();
+        private readonly Dictionary<Hospital, List<Clinic>> _hospitalToClinics = new Dictionary<Hospital, List<Clinic>>();
 
-        public ClinicAttachmentService()
+        // Singleton для глобального доступа
+        private static ClinicAttachmentManager _instance;
+        private static readonly object _lock = new object();
+
+        public static ClinicAttachmentManager Instance
         {
-            _attachments = new Dictionary<Clinic, Hospital>();
+            get
+            {
+                lock (_lock)
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new ClinicAttachmentManager();
+                    }
+                    return _instance;
+                }
+            }
         }
 
-        public void AttachClinicToHospital(Clinic clinic, Hospital hospital)
+        private ClinicAttachmentManager() { }
+
+        // ============ ОСНОВНЫЕ РАБОЧИЕ МЕТОДЫ ============
+
+        public bool Attach(Clinic clinic, Hospital hospital)
         {
             if (clinic == null || hospital == null)
-                throw new ArgumentNullException();
-
-            if (_attachments.ContainsKey(clinic))
             {
-                var currentHospital = _attachments[clinic];
-                throw new InvalidOperationException(
-                    $"Поликлиника '{clinic.Name}' уже прикреплена к больнице '{currentHospital.Name}'");
+                Console.WriteLine("Ошибка: клиника или больница не могут быть null");
+                return false;
             }
 
-            // Используем метод клиники
-            clinic.AttachToHospital(hospital);
+            // Проверка 1: уже прикреплена к этой больнице?
+            if (_clinicToHospital.ContainsKey(clinic) && _clinicToHospital[clinic] == hospital)
+            {
+                Console.WriteLine($"Клиника '{clinic.Name}' уже прикреплена к '{hospital.Name}'");
+                return false;
+            }
 
-            // Сохраняем в словаре
-            _attachments[clinic] = hospital;
+            // Проверка 2: прикреплена к другой больнице?
+            if (_clinicToHospital.ContainsKey(clinic))
+            {
+                var currentHospital = _clinicToHospital[clinic];
+                throw new InvalidOperationException(
+                    $"Клиника '{clinic.Name}' уже прикреплена к другой больнице '{currentHospital.Name}'");
+            }
 
-            Console.WriteLine($"Сервис: связь сохранена ({clinic.Name} → {hospital.Name})");
+            // СОЗДАЕМ СВЯЗЬ
+            _clinicToHospital[clinic] = hospital;
+
+            if (!_hospitalToClinics.ContainsKey(hospital))
+                _hospitalToClinics[hospital] = new List<Clinic>();
+
+            if (!_hospitalToClinics[hospital].Contains(clinic))
+                _hospitalToClinics[hospital].Add(clinic);
+
+            Console.WriteLine($"+ {clinic.Name} -> {hospital.Name}");
+            return true;
         }
 
-        public void DetachClinic(Clinic clinic)
+        public bool Detach(Clinic clinic)
         {
-            if (clinic == null)
-                throw new ArgumentNullException(nameof(clinic));
+            if (!_clinicToHospital.ContainsKey(clinic))
+            {
+                Console.WriteLine($"Клиника '{clinic.Name}' не прикреплена ни к одной больнице");
+                return false;
+            }
 
-            if (!_attachments.ContainsKey(clinic))
-                throw new InvalidOperationException($"Поликлиника '{clinic.Name}' не найдена в сервисе");
+            var hospital = _clinicToHospital[clinic];
 
-            clinic.DetachFromHospital();
-            _attachments.Remove(clinic);
+            // УДАЛЯЕМ СВЯЗЬ
+            _clinicToHospital.Remove(clinic);
 
-            Console.WriteLine($"Сервис: связь удалена для {clinic.Name}");
+            if (_hospitalToClinics.ContainsKey(hospital))
+            {
+                _hospitalToClinics[hospital].Remove(clinic);
+
+                // Если у больницы больше нет клиник, удаляем запись
+                if (!_hospitalToClinics[hospital].Any())
+                    _hospitalToClinics.Remove(hospital);
+            }
+
+            Console.WriteLine($"- {clinic.Name} откреплена от {hospital.Name}");
+            return true;
         }
+
+        // ============ МЕТОДЫ ДЛЯ ПОЛУЧЕНИЯ ДАННЫХ (рабочие) ============
 
         public Hospital GetHospitalForClinic(Clinic clinic)
         {
-            _attachments.TryGetValue(clinic, out var hospital);
-            return hospital;
+            if (_clinicToHospital.TryGetValue(clinic, out var hospital))
+                return hospital;
+            return null;
         }
 
         public List<Clinic> GetClinicsForHospital(Hospital hospital)
         {
-            return _attachments
-                .Where(kvp => kvp.Value == hospital)
-                .Select(kvp => kvp.Key)
-                .ToList();
+            if (_hospitalToClinics.TryGetValue(hospital, out var clinics))
+                return clinics;
+            return new List<Clinic>();
         }
 
-        public bool IsClinicAttached(Clinic clinic)
+        public bool IsAttached(Clinic clinic) => _clinicToHospital.ContainsKey(clinic);
+
+        public bool HasClinics(Hospital hospital) =>
+            _hospitalToClinics.ContainsKey(hospital) && _hospitalToClinics[hospital].Any();
+
+        public int GetClinicCount(Hospital hospital)
         {
-            return _attachments.ContainsKey(clinic);
+            if (_hospitalToClinics.TryGetValue(hospital, out var clinics))
+                return clinics.Count;
+            return 0;
         }
 
-        public void PrintAllAttachments()
-        {
-            Console.WriteLine("\n=== ТЕКУЩИЕ ПРИКРЕПЛЕНИЯ ПОЛИКЛИНИК ===");
+        // ============ ВСПОМОГАТЕЛЬНЫЕ РАБОЧИЕ МЕТОДЫ ============
 
-            if (!_attachments.Any())
+        public void PrintHospitalStats(Hospital hospital)
+        {
+            var clinics = GetClinicsForHospital(hospital);
+            Console.WriteLine($"\n{hospital.Name}: {clinics.Count} клиник");
+
+            if (clinics.Any())
             {
-                Console.WriteLine("Нет прикреплений");
+                foreach (var clinic in clinics)
+                {
+                    Console.WriteLine($"  - {clinic.Name}");
+                }
+            }
+        }
+
+        // ============ МЕТОДЫ МАССОВЫХ ОПЕРАЦИЙ (рабочие) ============
+
+        public void DetachAllFromHospital(Hospital hospital)
+        {
+            var clinics = GetClinicsForHospital(hospital).ToList();
+            int count = clinics.Count;
+
+            foreach (var clinic in clinics)
+            {
+                Detach(clinic);
+            }
+
+            if (count > 0)
+                Console.WriteLine($"Все {count} клиник откреплены от {hospital.Name}");
+        }
+
+        public void Transfer(Clinic clinic, Hospital newHospital)
+        {
+            if (!IsAttached(clinic))
+            {
+                Attach(clinic, newHospital);
                 return;
             }
 
-            foreach (var kvp in _attachments)
-            {
-                Console.WriteLine($"• {kvp.Key.Name} (ID: {kvp.Key.ID}) → {kvp.Value.Name}");
-            }
-        }
+            var oldHospital = GetHospitalForClinic(clinic);
+            Detach(clinic);
+            Attach(clinic, newHospital);
 
-        // Дополнительные полезные методы
-        public int GetClinicCountForHospital(Hospital hospital)
-        {
-            return _attachments.Count(kvp => kvp.Value == hospital);
-        }
-
-        public bool HospitalHasClinics(Hospital hospital)
-        {
-            return _attachments.Values.Any(h => h == hospital);
-        }
-
-        public void DetachAllClinicsFromHospital(Hospital hospital)
-        {
-            var clinicsToDetach = GetClinicsForHospital(hospital).ToList();
-
-            foreach (var clinic in clinicsToDetach)
-            {
-                DetachClinic(clinic);
-            }
-
-            Console.WriteLine($"Откреплены все поликлиники от больницы '{hospital.Name}' ({clinicsToDetach.Count} шт.)");
+            Console.WriteLine($"~ {clinic.Name}: {oldHospital.Name} -> {newHospital.Name}");
         }
     }
 }

@@ -173,5 +173,29 @@ namespace ConsoleCourceWork.Services
             Console.WriteLine($"Уволено: {dismissedStaff} сотрудников");
             Console.WriteLine($"Всего в базе: {_staffPlacements.Count} записей");
         }
+
+        public List<IMedicalStaff> GetAllMedicalStaff()
+        {
+            return _staffPlacements.Values
+                .Where(p => p.IsActive && p.Staff is IMedicalStaff)
+                .Select(p => p.Staff as IMedicalStaff)
+                .ToList();
+        }
+
+        public List<ISupportStaff> GetAllSupportStaff()
+        {
+            return _staffPlacements.Values
+                .Where(p => p.IsActive && p.Staff is ISupportStaff)
+                .Select(p => p.Staff as ISupportStaff)
+                .ToList();
+        }
+
+        public List<IHazardWorkStaff> GetAllHazardStaff()
+        {
+            return _staffPlacements.Values
+                .Where(p => p.IsActive && p.Staff is IHazardWorkStaff)
+                .Select(p => p.Staff as IHazardWorkStaff)
+                .ToList();
+        }
     }
 }

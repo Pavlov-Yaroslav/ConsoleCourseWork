@@ -3,6 +3,7 @@ using ConsoleCourceWork.Interfaces;
 using ConsoleCourceWork.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleCourceWork.Models
 {
@@ -13,10 +14,8 @@ namespace ConsoleCourceWork.Models
         public string ID { get; private set; }
         public bool IsActive { get; set; }
 
-        // Только инфраструктура
+        // ВООБЩЕ УБИРАЕМ AttachedClinics - сервис всё хранит
         public List<Building> Buildings { get; private set; }
-
-        // Сервисы
         public PatientManagementService PatientService { get; private set; }
         public StaffManagementService StaffService { get; private set; }
 
@@ -27,27 +26,13 @@ namespace ConsoleCourceWork.Models
             Address = address;
             IsActive = true;
             Buildings = new List<Building>();
-
-            // Создаем сервисы
             PatientService = new PatientManagementService(this);
             StaffService = new StaffManagementService(this);
         }
 
-        public void AddBuilding(Building building)
-        {
-            Buildings.Add(building);
-        }
+        public void AddBuilding(Building building) => Buildings.Add(building);
+        public void RemoveBuilding(Building building) => Buildings.Remove(building);
 
-        public void RemoveBuilding(Building building)
-        {
-            Buildings.Remove(building);
-        }
-
-        public override string ToString()
-        {
-            return $"{Name} (ID: {ID})\n" +
-                   $"Адрес: {Address}\n" +
-                   $"Зданий: {Buildings.Count}";
-        }
+        public override string ToString() => $"{Name} (ID: {ID})\nАдрес: {Address}\nЗданий: {Buildings.Count}";
     }
 }

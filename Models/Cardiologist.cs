@@ -73,10 +73,44 @@ namespace ConsoleCourceWork.Models
         public void SetAcademicDegree(AcademicDegree degree)
         {
             AcademicDegree = degree;
+
+            // Автоматическое присвоение звания в зависимости от степени
+            if (degree == AcademicDegree.DoctorOfMedicalSciences)
+            {
+                AcademicTitle = AcademicTitle.Professor;
+            }
+            else if (degree == AcademicDegree.CandidateOfMedicalSciences)
+            {
+                AcademicTitle = AcademicTitle.AssistantProfessor; // Доцент
+            }
+            else
+            {
+                AcademicTitle = AcademicTitle.None;
+            }
         }
 
+        // Добавляем проверку при установке звания
         public void SetAcademicTitle(AcademicTitle title)
         {
+            // Проверяем соответствие степени и звания
+            if (title == AcademicTitle.Professor &&
+                AcademicDegree != AcademicDegree.DoctorOfMedicalSciences)
+            {
+                Console.WriteLine($"Предупреждение: {Surname} {Name} не имеет степени доктора медицинских наук, " +
+                                 "звание профессора не присвоено. Используется 'None'.");
+                AcademicTitle = AcademicTitle.None;
+                return;
+            }
+
+            if (title == AcademicTitle.AssistantProfessor &&
+                AcademicDegree != AcademicDegree.CandidateOfMedicalSciences)
+            {
+                Console.WriteLine($"Предупреждение: {Surname} {Name} не имеет степени кандидата медицинских наук, " +
+                                 "звание доцента не присвоено. Используется 'None'.");
+                AcademicTitle = AcademicTitle.None;
+                return;
+            }
+
             AcademicTitle = title;
         }
 

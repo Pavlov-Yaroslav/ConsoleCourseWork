@@ -7,29 +7,23 @@ using System.Threading.Tasks;
 
 namespace ConsoleCourceWork.Interfaces
 {
-    public interface IClinic
+    public interface IClinic : IMedInstitution
     {
-        // Базовые свойства
-        string Name { get; }
-        string ID { get; }
-
-        // Связь с больницей
-        Hospital AttachedHospital { get; }
-
-        // Коллекции
+        // Основные свойства
         List<IStaff> MedicalStaff { get; }
         List<IPatient> RegisteredPatients { get; }
 
-        // Методы прикрепления/открепления
-        void AttachToHospital(Hospital hospital);
-        void DetachFromHospital();
-
-        // Базовые методы для персонала
+        // Методы работы с персоналом
         void AddStaff(IStaff staff);
         void RemoveStaff(IStaff staff);
 
-        // Базовые методы для пациентов
+        // Методы работы с пациентами
         void AddPatient(IPatient patient);
         void RemovePatient(IPatient patient);
+
+        // Вспомогательные методы
+        int GetStaffCount();
+        int GetPatientCount();
     }
 }
+
