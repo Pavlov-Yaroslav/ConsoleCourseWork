@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|c:\\users\\\u044F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\consolecoursework\\services\\treatmentrecordgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|solutionrelative:services\\treatmentrecordgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|c:\\users\\\u044F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\consolecoursework\\services\\patientmanagementservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|solutionrelative:services\\patientmanagementservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|c:\\users\\\u044F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\consolecoursework\\interfaces\\iclinic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|solutionrelative:interfaces\\iclinic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|c:\\users\\\u044F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\consolecoursework\\models\\clinic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EF46DADC-EC3F-4836-826C-0E4C0F91A261}|ConsoleCourceWork.csproj|solutionrelative:models\\clinic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,17 +22,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAJQAAAAAAAAAAAAgwKIAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-30T11:17:19.155Z",
               "IsPinned": true,
@@ -41,29 +41,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "IClinic.cs",
-              "DocumentMoniker": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\Interfaces\\IClinic.cs",
-              "RelativeDocumentMoniker": "Interfaces\\IClinic.cs",
-              "ToolTip": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\Interfaces\\IClinic.cs",
-              "RelativeToolTip": "Interfaces\\IClinic.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAmwAUAAAAdAAAAAAAAAA==",
+              "Title": "PatientManagementService.cs",
+              "DocumentMoniker": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\Services\\PatientManagementService.cs",
+              "RelativeDocumentMoniker": "Services\\PatientManagementService.cs",
+              "ToolTip": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\Services\\PatientManagementService.cs",
+              "RelativeToolTip": "Services\\PatientManagementService.cs",
+              "ViewState": "AgIAAEUAAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-07T19:08:56.96Z",
-              "IsPinned": true,
+              "WhenOpened": "2026-01-07T21:07:15.041Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Clinic.cs",
-              "DocumentMoniker": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\Models\\Clinic.cs",
-              "RelativeDocumentMoniker": "Models\\Clinic.cs",
-              "ToolTip": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\Models\\Clinic.cs",
-              "RelativeToolTip": "Models\\Clinic.cs",
-              "ViewState": "AgIAACAAAAAAAAAAAAAMwDcAAABMAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "TreatmentRecordGenerator.cs",
+              "DocumentMoniker": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\Services\\TreatmentRecordGenerator.cs",
+              "RelativeDocumentMoniker": "Services\\TreatmentRecordGenerator.cs",
+              "ToolTip": "C:\\Users\\\u042F\u0440\u043E\u0441\u043B\u0430\u0432\\source\\repos\\ConsoleCourseWork\\Services\\TreatmentRecordGenerator.cs",
+              "RelativeToolTip": "Services\\TreatmentRecordGenerator.cs",
+              "ViewState": "AgIAAN8AAAAAAAAAAAAwwOoAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-07T19:03:44.951Z",
-              "IsPinned": true,
+              "WhenOpened": "2026-01-07T20:52:18.849Z",
               "EditorCaption": ""
             },
             {
