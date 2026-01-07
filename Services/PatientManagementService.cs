@@ -64,37 +64,36 @@ namespace ConsoleCourceWork.Services
         public bool DischargePatient(IPatient patient)
         {
             if (!_patientPlacements.ContainsKey(patient))
-            {
-                Console.WriteLine($"Пациент {patient.Surname} {patient.Name} не найден в системе.");
                 return false;
-            }
 
             var placement = _patientPlacements[patient];
-
             if (!placement.IsActive)
-            {
-                Console.WriteLine($"Пациент {patient.Surname} {patient.Name} уже выписан.");
                 return false;
-            }
 
-            // Создаем запись в истории болезней
-            var recordId = IdGenerator.GenerateTreatmentRecordId();
-            var treatmentRecord = new TreatmentRecord(
-                recordId,
-                patient,
-                _hospital as IMedInstitution,
-                placement.AdmissionDate
+            // Собираем врачей - ДОБАВЛЯЕМ лечащего врача
+            var doctors = new List<IMedicalStaff>();
+            if (placement.AttendingDoctor != null)
+                doctors.Add(placement.AttendingDoctor);
+
+            // Генерируем историю
+            var record = TreatmentRecordGenerator.GenerateTreatmentRecord(
+                patient: patient,
+                institution: _hospital as IMedInstitution,
+                diagnosis: placement.Diagnosis,
+                doctors: doctors, // Теперь врачи передаются
+                daysInTreatment: (int)(DateTime.Now - placement.AdmissionDate).TotalDays
             );
 
-            treatmentRecord.AddDiagnosis(placement.Diagnosis);
-            treatmentRecord.CompleteRecord(DateTime.Now);
-            patient.TreatmentHistory.Add(treatmentRecord);
-
-            // Выписываем пациента
+            patient.TreatmentHistory.Add(record);
             placement.Discharge();
 
-            Console.WriteLine($"[{_hospital.Name}] Пациент {patient.Surname} {patient.Name} выписан.");
-            Console.WriteLine($"Создана запись в истории болезней: #{recordId}");
+            Console.WriteLine($"\nПациент {patient.Surname} выписан.");
+            Console.WriteLine($"Создана история болезни #{record.ID}");
+
+            // Выводим детали
+            Console.WriteLine($"  Диагноз: {record.Diagnoses[0].Name}");
+            Console.WriteLine($"  Врачей: {record.AttendingDoctors.Count}");
+            Console.WriteLine($"  Рецептов: {record.Prescriptions.Count}");
 
             return true;
         }
@@ -148,6 +147,80 @@ namespace ConsoleCourceWork.Services
             Console.WriteLine($"В больнице: {activePatients} пациентов");
             Console.WriteLine($"Выписано: {dischargedPatients} пациентов");
             Console.WriteLine($"Всего: {_patientPlacements.Count} записей");
+        }
+
+        public bool DischargePatient(IPatient patient, IDiagnosis finalDiagnosis = null)
+        {
+            if (!_patientPlacements.ContainsKey(patient))
+            {
+                Console.WriteLine($"Пациент {patient.Surname} {patient.Name} не найден в системе.");
+                return false;
+            }
+
+            var placement = _patientPlacements[patient];
+
+            if (!placement.IsActive)
+            {
+                Console.WriteLine($"Пациент {patient.Surname} {patient.Name} уже выписан.");
+                return false;
+            }
+
+            // Если не указан финальный диагноз, используем из размещения
+            var diagnosis = finalDiagnosis ?? placement.Diagnosis;
+
+            // Получаем врачей (если есть лечащий врач - добавляем его)
+            var doctors = new List<IMedicalStaff>();
+            if (placement.AttendingDoctor != null)
+                doctors.Add(placement.AttendingDoctor);
+
+            // Если в больнице есть другие врачи, добавляем их
+            var hospitalStaff = _hospital.StaffService.GetAllMedicalStaff();
+            foreach (var doctor in hospitalStaff)
+            {
+                if (doctor != placement.AttendingDoctor && doctors.Count < 3) // не более 3 врачей
+                    doctors.Add(doctor);
+            }
+
+            // ГЕНЕРИРУЕМ ИСТОРИЮ БОЛЕЗНИ
+            var treatmentRecord = TreatmentRecordGenerator.GenerateTreatmentRecord(
+                patient: patient,
+                institution: _hospital as IMedInstitution,
+                diagnosis: diagnosis,
+                doctors: doctors,
+                daysInTreatment: (int)(DateTime.Now - placement.AdmissionDate).TotalDays
+            );
+
+            // Добавляем в историю пациента
+            patient.TreatmentHistory.Add(treatmentRecord);
+
+            // Выписываем пациента
+            placement.Discharge();
+
+            Console.WriteLine($"[{_hospital.Name}] Пациент {patient.Surname} {patient.Name} выписан.");
+            Console.WriteLine($"Создана запись в истории болезней: #{treatmentRecord.ID}");
+
+            // Выводим детали истории
+            PrintTreatmentRecordDetails(treatmentRecord);
+
+            return true;
+        }
+
+        private void PrintTreatmentRecordDetails(ITreatmentRecord record)
+        {
+            Console.WriteLine("\n=== ДЕТАЛИ ИСТОРИИ БОЛЕЗНИ ===");
+            Console.WriteLine($"Диагноз: {record.Diagnoses.FirstOrDefault()?.Name}");
+            Console.WriteLine($"Рецептов: {record.Prescriptions.Count}");
+            Console.WriteLine($"Процедур: {record.Procedures.Count}");
+            Console.WriteLine($"Анализов: {record.Analyses.Count}");
+
+            if (record.Prescriptions.Any())
+            {
+                Console.WriteLine("\nРецепты:");
+                foreach (var prescription in record.Prescriptions)
+                {
+                    Console.WriteLine($"  - {prescription.Medication} ({prescription.Dosage})");
+                }
+            }
         }
     }
 }

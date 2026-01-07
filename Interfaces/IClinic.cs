@@ -9,21 +9,17 @@ namespace ConsoleCourceWork.Interfaces
 {
     public interface IClinic : IMedInstitution
     {
-        // Основные свойства
-        List<IStaff> MedicalStaff { get; }
-        List<IPatient> RegisteredPatients { get; }
+        // Пациенты теперь получаются через методы
+        int GetPatientCount();
+        List<IPatient> GetRegisteredPatients();
 
-        // Методы работы с персоналом
+        List<IStaff> MedicalStaff { get; }
         void AddStaff(IStaff staff);
         void RemoveStaff(IStaff staff);
 
-        // Методы работы с пациентами
-        void AddPatient(IPatient patient);
-        void RemovePatient(IPatient patient);
-
-        // Вспомогательные методы
-        int GetStaffCount();
-        int GetPatientCount();
+        // Методы для услуг
+        bool CanProvideService(IPatient patient);
+        void ProvideSimpleService(IPatient patient, string serviceName);
     }
 }
 

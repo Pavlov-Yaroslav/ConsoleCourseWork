@@ -10,9 +10,13 @@ namespace ConsoleCourceWork.Interfaces
     {
         string ID { get; }
         IPatient Patient { get; }
-        IMedInstitution Institution { get; }
+        IMedInstitution MedInstitution { get; }
         DateTime StartDate { get; }
         DateTime? EndDate { get; }
         List<IDiagnosis> Diagnoses { get; }
+        List<IPrescription> Prescriptions { get; }
+        List<IProcedure> Procedures { get; }
+        List<IMedicalStaff> AttendingDoctors { get; }
+        List<IAnalysis> Analyses { get; }
     }
 }

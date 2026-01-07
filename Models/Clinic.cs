@@ -1,9 +1,10 @@
-﻿using System;
+﻿using ConsoleCourceWork.Interfaces;
+using ConsoleCourceWork.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ConsoleCourceWork.Interfaces;
 
 namespace ConsoleCourceWork.Models
 {
@@ -15,7 +16,9 @@ namespace ConsoleCourceWork.Models
         public string Address { get; }
         public bool IsActive { get; set; }
         public List<IStaff> MedicalStaff { get; private set; }
-        public List<IPatient> RegisteredPatients { get; private set; }
+
+        // Пациенты теперь хранятся ТОЛЬКО в PatientAttachmentManager
+        private PatientAttachmentManager PatientManager => PatientAttachmentManager.Instance;
 
         public Clinic(string id, string name, string address)
         {
@@ -24,7 +27,6 @@ namespace ConsoleCourceWork.Models
             Address = address;
             IsActive = true;
             MedicalStaff = new List<IStaff>();
-            RegisteredPatients = new List<IPatient>();
         }
 
         // IClinic methods
@@ -46,33 +48,51 @@ namespace ConsoleCourceWork.Models
             }
         }
 
-        public void AddPatient(IPatient patient)
+        // Новые методы для работы с пациентами через менеджер
+        public int GetPatientCount() => PatientManager.GetPatientCount(this);
+
+        public List<IPatient> GetRegisteredPatients() => PatientManager.GetPatientsForClinic(this);
+
+        public bool IsPatientRegistered(IPatient patient) => PatientManager.IsAttached(patient);
+
+        // Метод для проверки возможности оказания услуги
+        public bool CanProvideService(IPatient patient)
         {
-            if (patient == null) throw new ArgumentNullException(nameof(patient));
-            if (!RegisteredPatients.Contains(patient))
+            var attachedClinic = PatientManager.GetClinicForPatient(patient);
+
+            if (attachedClinic == null)
             {
-                RegisteredPatients.Add(patient);
-                Console.WriteLine($"+ Пациент {patient.Surname} {patient.Name} зарегистрирован");
+                Console.WriteLine($"{patient.Surname} не прикреплен ни к одной клинике");
+                return false;
             }
+
+            if (attachedClinic != this)
+            {
+                Console.WriteLine($"{patient.Surname} прикреплен к другой клинике: {attachedClinic.Name}");
+                return false;
+            }
+
+            return true;
         }
 
-        public void RemovePatient(IPatient patient)
+        // Метод для оказания услуги
+        public void ProvideSimpleService(IPatient patient, string serviceName)
         {
-            if (RegisteredPatients.Remove(patient))
+            if (!CanProvideService(patient))
             {
-                Console.WriteLine($"- Пациент {patient.Surname} удален из регистрации");
+                Console.WriteLine($"❌ Услуга '{serviceName}' НЕ оказана!");
+                return;
             }
-        }
 
-        public int GetStaffCount() => MedicalStaff.Count;
-        public int GetPatientCount() => RegisteredPatients.Count;
+            Console.WriteLine($"✓ Оказана услуга '{serviceName}' для {patient.Surname}");
+        }
 
         public override string ToString()
         {
             return $"{Name} (ID: {ID})\n" +
                    $"Адрес: {Address}\n" +
                    $"Персонал: {MedicalStaff.Count} чел.\n" +
-                   $"Пациентов: {RegisteredPatients.Count} чел.";
+                   $"Пациентов: {GetPatientCount()} чел.";
         }
     }
 }

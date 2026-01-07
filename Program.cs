@@ -14,324 +14,276 @@ namespace ConsoleCourceWork
     {
         static void Main()
         {
-            Console.WriteLine("=== ТЕСТИРОВАНИЕ СИСТЕМЫ ДОГОВОРОВ ===\n");
+            Console.WriteLine("=== ДЕМОНСТРАЦИЯ МЕДИЦИНСКОЙ СИСТЕМЫ ===\n");
 
-            var contractManager = ContractManager.Instance;
+            // Инициализируем менеджеры
+            var clinicManager = ClinicAttachmentManager.Instance;
+            var patientManager = PatientAttachmentManager.Instance;
 
-            // 1. СОЗДАЕМ ОБЪЕКТЫ ДЛЯ ТЕСТОВ
-            Console.WriteLine("1. СОЗДАНИЕ ТЕСТОВЫХ ОБЪЕКТОВ:");
+            // 1. СОЗДАЕМ УЧРЕЖДЕНИЯ
+            Console.WriteLine("1. СОЗДАНИЕ УЧРЕЖДЕНИЙ:");
+            Console.WriteLine("-----------------------");
 
-            var laboratory1 = new Laboratory("LAB1", "Центральная диагностическая лаборатория",
-                                           "ул. Лабораторная, 1", LabProfileType.Clinical);
-            var laboratory2 = new Laboratory("LAB2", "Биохимическая лаборатория",
-                                           "ул. Аналитическая, 5", LabProfileType.Biochemical);
+            var hospital = new Hospital("H001", "Городская больница №1", "ул. Ленина, 1");
+            var clinic1 = new Clinic("C001", "Поликлиника №3", "ул. Мира, 15");
+            var clinic2 = new Clinic("C002", "Детская поликлиника", "ул. Пушкина, 10");
 
-            var hospital = new Hospital("H1", "Городская больница №1", "ул. Больничная, 10");
-            var clinic = new Clinic("C1", "Поликлиника №1", "ул. Поликлиническая, 15");
+            Console.WriteLine($"Создана больница: {hospital.Name}");
+            Console.WriteLine($"Созданы клиники: {clinic1.Name}, {clinic2.Name}");
 
-            Console.WriteLine($"• {laboratory1.Name} ({laboratory1.ProfileType})");
-            Console.WriteLine($"• {laboratory2.Name} ({laboratory2.ProfileType})");
-            Console.WriteLine($"• {hospital.Name}");
-            Console.WriteLine($"• {clinic.Name}");
+            // 2. ПРИКРЕПЛЯЕМ КЛИНИКИ К БОЛЬНИЦЕ
+            Console.WriteLine("\n2. ПРИКРЕПЛЕНИЕ КЛИНИК К БОЛЬНИЦЕ:");
+            Console.WriteLine("----------------------------------");
 
-            // ============================================
-            // ТЕСТ 1: СОЗДАНИЕ ДОГОВОРОВ
-            // ============================================
-            Console.WriteLine("\n\n2. ТЕСТ 1: СОЗДАНИЕ ДОГОВОРОВ:");
+            clinicManager.Attach(clinic1, hospital);
+            clinicManager.Attach(clinic2, hospital);
 
-            Console.WriteLine("\n2.1 Создаем договор лаборатории 1 с больницей:");
-            Contract contract1 = null;
-            try
-            {
-                contract1 = contractManager.CreateContract(
-                    laboratory: laboratory1,
-                    client: hospital,
-                    startDate: DateTime.Now.AddMonths(-3), // договор начался 3 месяца назад
-                    endDate: DateTime.Now.AddMonths(9)     // закончится через 9 месяцев
-                );
-                Console.WriteLine($"✓ Создан: {contract1}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"✗ Ошибка: {ex.Message}");
-            }
+            // Проверяем связи
+            var attachedClinics = clinicManager.GetClinicsForHospital(hospital);
+            Console.WriteLine($"\nК больнице '{hospital.Name}' прикреплено: {attachedClinics.Count} клиник");
 
-            Console.WriteLine("\n2.2 Создаем договор лаборатории 1 с поликлиникой:");
-            Contract contract2 = null;
-            try
-            {
-                contract2 = contractManager.CreateContract(
-                    laboratory: laboratory1,
-                    client: clinic,
-                    startDate: DateTime.Now, // начинается сегодня
-                    endDate: null            // бессрочный договор
-                );
-                Console.WriteLine($"✓ Создан: {contract2}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"✗ Ошибка: {ex.Message}");
-            }
+            // 3. СОЗДАЕМ ПАЦИЕНТОВ
+            Console.WriteLine("\n3. СОЗДАНИЕ ПАЦИЕНТОВ:");
+            Console.WriteLine("----------------------");
 
-            Console.WriteLine("\n2.3 Создаем договор лаборатории 2 с больницей:");
-            Contract contract3 = null;
-            try
-            {
-                contract3 = contractManager.CreateContract(
-                    laboratory: laboratory2,
-                    client: hospital,
-                    startDate: DateTime.Now.AddDays(-10),
-                    endDate: DateTime.Now.AddMonths(6)
-                );
-                Console.WriteLine($"✓ Создан: {contract3}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"✗ Ошибка: {ex.Message}");
-            }
+            var patient1 = new Patient("P001", "Иванов", "Иван", "Иванович",
+                                      new DateTime(1980, 5, 15), "1234567890");
+            var patient2 = new Patient("P002", "Петрова", "Мария", "Сергеевна",
+                                      new DateTime(1992, 3, 22), "9876543210");
+            var patient3 = new Patient("P003", "Сидоров", "Алексей", "Петрович",
+                                      new DateTime(1975, 11, 8), "5555555555");
 
-            // ============================================
-            // ТЕСТ 2: ПРОВЕРКА ДУБЛИРОВАНИЯ
-            // ============================================
-            Console.WriteLine("\n\n3. ТЕСТ 2: ЗАЩИТА ОТ ДУБЛИРОВАНИЯ:");
+            Console.WriteLine($"Созданы пациенты: {patient1.Surname}, {patient2.Surname}, {patient3.Surname}");
 
-            Console.WriteLine("\n3.1 Пытаемся создать второй договор между теми же участниками:");
-            try
-            {
-                var duplicateContract = contractManager.CreateContract(
-                    laboratory: laboratory1,
-                    client: hospital,
-                    startDate: DateTime.Now,
-                    endDate: DateTime.Now.AddYears(1)
-                );
-                Console.WriteLine($"✗ ОШИБКА: Второй договор создан (это не должно было произойти)");
-            }
-            catch (InvalidOperationException ex)
-            {
-                Console.WriteLine($"✓ Корректная ошибка: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"✗ Неожиданная ошибка: {ex.GetType().Name}: {ex.Message}");
-            }
+            // 4. ПРИКРЕПЛЯЕМ ПАЦИЕНТОВ К КЛИНИКАМ
+            Console.WriteLine("\n4. ПРИКРЕПЛЕНИЕ ПАЦИЕНТОВ К КЛИНИКАМ:");
+            Console.WriteLine("-------------------------------------");
 
-            // ============================================
-            // ТЕСТ 3: ПОИСК И ФИЛЬТРАЦИЯ
-            // ============================================
-            Console.WriteLine("\n\n4. ТЕСТ 3: ПОИСК И ФИЛЬТРАЦИЯ:");
+            patientManager.Attach(patient1, clinic1);
+            patientManager.Attach(patient2, clinic2);
+            patientManager.Attach(patient3, clinic1);
 
-            Console.WriteLine("\n4.1 Все договоры лаборатории 1:");
-            var lab1Contracts = contractManager.GetContractsByLaboratory(laboratory1);
-            Console.WriteLine($"Найдено {lab1Contracts.Count} договоров:");
-            foreach (var contract in lab1Contracts)
-            {
-                Console.WriteLine($"  - {contract}");
-            }
+            // Пробуем прикрепить повторно (должна быть ошибка)
+            Console.WriteLine("\nПопытка повторного прикрепления:");
+            patientManager.Attach(patient1, clinic1);
 
-            Console.WriteLine("\n4.2 Все договоры больницы:");
-            var hospitalContracts = contractManager.GetContractsByClient(hospital);
-            Console.WriteLine($"Найдено {hospitalContracts.Count} договоров:");
-            foreach (var contract in hospitalContracts)
-            {
-                Console.WriteLine($"  - {contract}");
-            }
+            // 5. ПРОВЕРЯЕМ ПРИКРЕПЛЕНИЯ
+            Console.WriteLine("\n5. ПРОВЕРКА ПРИКРЕПЛЕНИЙ:");
+            Console.WriteLine("------------------------");
 
-            Console.WriteLine("\n4.3 Активные договоры:");
-            var activeContracts = contractManager.GetActiveContracts();
-            Console.WriteLine($"Активных договоров: {activeContracts.Count}");
+            Console.WriteLine($"Клиника пациента Иванова: {patientManager.GetClinicForPatient(patient1)?.Name}");
+            Console.WriteLine($"Клиника пациента Петровой: {patientManager.GetClinicForPatient(patient2)?.Name}");
+            Console.WriteLine($"Прикреплен ли Сидоров? {patientManager.IsAttached(patient3)}");
 
-            // ============================================
-            // ТЕСТ 4: ПОЛУЧЕНИЕ ДОГОВОРА ПО ID
-            // ============================================
-            Console.WriteLine("\n\n5. ТЕСТ 4: РАБОТА С ID:");
+            // 6. ПРОВЕРЯЕМ КЛИНИКИ
+            Console.WriteLine("\n6. СТАТИСТИКА КЛИНИК:");
+            Console.WriteLine("--------------------");
 
-            if (contract1 != null)
-            {
-                Console.WriteLine($"\n5.1 Ищем договор по ID '{contract1.ID}':");
-                var foundContract = contractManager.GetContract(contract1.ID);
-                if (foundContract != null)
-                {
-                    Console.WriteLine($"✓ Найден: {foundContract}");
-                }
-                else
-                {
-                    Console.WriteLine($"✗ Не найден (ошибка)");
-                }
-            }
+            Console.WriteLine($"Пациентов в '{clinic1.Name}': {patientManager.GetPatientCount(clinic1)}");
+            Console.WriteLine($"Пациентов в '{clinic2.Name}': {patientManager.GetPatientCount(clinic2)}");
 
-            Console.WriteLine("\n5.2 Пытаемся найти несуществующий договор:");
-            var nonExistent = contractManager.GetContract("NONEXISTENT");
-            Console.WriteLine($"Результат: {(nonExistent == null ? "null (корректно)" : "найден (ошибка)")}");
+            // 7. ТЕСТИРУЕМ УСЛУГИ КЛИНИК
+            Console.WriteLine("\n7. ТЕСТИРОВАНИЕ УСЛУГ:");
+            Console.WriteLine("----------------------");
 
-            // ============================================
-            // ТЕСТ 5: РАСТОРЖЕНИЕ ДОГОВОРА
-            // ============================================
-            Console.WriteLine("\n\n6. ТЕСТ 5: РАСТОРЖЕНИЕ ДОГОВОРА:");
+            Console.WriteLine("\nПопытка получить услуги:");
+            clinic1.ProvideSimpleService(patient1, "Консультация терапевта");
+            clinic1.ProvideSimpleService(patient2, "Консультация терапевта");
+            clinic2.ProvideSimpleService(patient2, "Прививка");
 
-            if (contract1 != null)
-            {
-                Console.WriteLine($"\n6.1 Расторгаем договор {contract1.ID}:");
-                contractManager.TerminateContract(contract1.ID);
+            // 8. ОТКРЕПЛЕНИЕ И ПЕРЕНОС
+            Console.WriteLine("\n8. ОТКРЕПЛЕНИЕ И ПЕРЕНОС:");
+            Console.WriteLine("-------------------------");
 
-                Console.WriteLine("\n6.2 Проверяем активные договоры после расторжения:");
-                var activeAfterTermination = contractManager.GetActiveContracts();
-                Console.WriteLine($"Активных договоров: {activeAfterTermination.Count}");
+            // Открепляем пациента
+            patientManager.Detach(patient3);
+            Console.WriteLine($"Пациентов в '{clinic1.Name}': {patientManager.GetPatientCount(clinic1)}");
 
-                Console.WriteLine("\n6.3 Пытаемся создать новый договор с теми же участниками:");
-                try
-                {
-                    var newContract = contractManager.CreateContract(laboratory1, hospital, DateTime.Now);
-                    Console.WriteLine($"✓ Новый договор создан после расторжения старого");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"✗ Ошибка: {ex.Message}");
-                }
-            }
+            // Прикрепляем к другой клинике
+            patientManager.Attach(patient3, clinic2);
+            Console.WriteLine($"Пациентов в '{clinic2.Name}': {patientManager.GetPatientCount(clinic2)}");
 
-            // ============================================
-            // ТЕСТ 6: ПРОВЕРКА ДАТ
-            // ============================================
-            Console.WriteLine("\n\n7. ТЕСТ 6: ВАЛИДАЦИЯ ДАТ:");
+            // 9. ТЕСТ: ПРИКРЕПЛЕНИЕ К НЕСКОЛЬКИМ КЛИНИКАМ
+            Console.WriteLine("\n9. ТЕСТ: ПРИКРЕПЛЕНИЕ К НЕСКОЛЬКИМ КЛИНИКАМ:");
+            Console.WriteLine("-------------------------------------------");
 
-            Console.WriteLine("\n7.1 Пытаемся создать договор с датой начала в будущем:");
-            try
-            {
-                // Используем лабораторию 2 и поликлинику (у них нет договора)
-                var futureContract = contractManager.CreateContract(
-                    laboratory: laboratory2,  // Используем другую лабораторию!
-                    client: clinic,
-                    startDate: DateTime.Now.AddDays(7), // Дата в будущем
-                    endDate: DateTime.Now.AddYears(1)
-                );
-                Console.WriteLine($"✗ Договор создан (это ошибка!)");
-            }
-            catch (ArgumentException ex)
-            {
-                Console.WriteLine($"✓ Корректная ошибка: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"✗ Неожиданная ошибка: {ex.GetType().Name}: {ex.Message}");
-            }
+            var testPatient = new Patient("P004", "Васильев", "Дмитрий", "Андреевич",
+                                        new DateTime(1990, 7, 20), "999888777");
 
-            Console.WriteLine("\n7.2 Пытаемся создать договор с некорректными датами:");
-            try
-            {
-                // Нужно использовать участников БЕЗ существующего договора
-                // Например, лабораторию 2 и поликлинику (у них нет договора)
-                var invalidContract = contractManager.CreateContract(
-                    laboratory: laboratory2,  // Биохимическая лаборатория
-                    client: clinic,           // Поликлиника №1
-                    startDate: DateTime.Now,
-                    endDate: DateTime.Now.AddDays(-1) // Дата окончания в прошлом (ошибка!)
-                );
-                Console.WriteLine($"[ERROR] Договор создан (это ошибка!)");
-            }
-            catch (ArgumentException ex)
-            {
-                Console.WriteLine($"[OK] Корректная ошибка валидации дат: {ex.Message}");
-            }
-            catch (InvalidOperationException ex)
-            {
-                Console.WriteLine($"[OK] Корректная ошибка дублирования: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[ERROR] Неожиданная ошибка: {ex.GetType().Name}: {ex.Message}");
-            }
+            Console.WriteLine("Попытка прикрепить Васильева к Поликлинике №3:");
+            patientManager.Attach(testPatient, clinic1);
 
-            // ============================================
-            // ТЕСТ 7: РАБОТА С ЛАБОРАНТАМИ
-            // ============================================
-            Console.WriteLine("\n\n8. ТЕСТ 7: ПЕРСОНАЛ ЛАБОРАТОРИИ:");
+            Console.WriteLine("\nПопытка прикрепить того же Васильева к Детской поликлинике:");
+            patientManager.Attach(testPatient, clinic2);
 
-            Console.WriteLine("\n8.1 Создаем лаборантов:");
-            var labAssistant1 = new LaboratoryAssistant(
-                id: "EMP001",
-                surname: "Иванова",
-                name: "Мария",
-                patronymic: "Петровна",
-                licenseNumber: "LAB-LIC-001",
-                initialSalary: 35000
+            // Проверяем
+            var clinic = patientManager.GetClinicForPatient(testPatient);
+            Console.WriteLine($"\nК какой клинике прикреплен Васильев? {clinic?.Name}");
+
+            // 10. ФИНАЛЬНАЯ СТАТИСТИКА
+            Console.WriteLine("\n10. ФИНАЛЬНАЯ СТАТИСТИКА:");
+            Console.WriteLine("------------------------");
+
+            Console.WriteLine($"Больница: {hospital.Name}");
+            Console.WriteLine($"  Прикреплено клиник: {clinicManager.GetClinicCount(hospital)}");
+
+            Console.WriteLine($"\nКлиника '{clinic1.Name}':");
+            var patients1 = patientManager.GetPatientsForClinic(clinic1);
+            Console.WriteLine($"  Пациентов: {patients1.Count}");
+            foreach (var p in patients1)
+                Console.WriteLine($"    - {p.Surname}");
+
+            Console.WriteLine($"\nКлиника '{clinic2.Name}':");
+            var patients2 = patientManager.GetPatientsForClinic(clinic2);
+            Console.WriteLine($"  Пациентов: {patients2.Count}");
+            foreach (var p in patients2)
+                Console.WriteLine($"    - {p.Surname}");
+
+            // 11. ДЕМОНСТРАЦИЯ ИСТОРИИ БОЛЕЗНИ
+            Console.WriteLine("\n11. ДЕМОНСТРАЦИЯ ИСТОРИИ БОЛЕЗНИ:");
+            Console.WriteLine("--------------------------------");
+
+            // Создаем врача
+            var cardiologist = new Cardiologist("D001", "Смирнов", "Александр", "Иванович",
+                "LIC12345", 50000);
+
+            // Создаем диагноз
+            var diagnosis = new Diagnosis("I10", "Гипертония",
+                "Повышенное давление", SpecializationDep.CardiologyDep);
+
+            // 11.1 Ручное создание
+            Console.WriteLine("\n11.1 РУЧНОЕ СОЗДАНИЕ:");
+            var manualPrescription = TreatmentRecordGenerator.CreatePrescription(
+                cardiologist, "Аспирин", "500 мг", "Принимать 2 раза в день");
+            Console.WriteLine($"Ручной рецепт: {manualPrescription.Medication}");
+
+            var manualProcedure = TreatmentRecordGenerator.CreateProcedure(
+                cardiologist, "Измерение давления", "Давление 140/90");
+            Console.WriteLine($"Ручная процедура: {manualProcedure.Description}");
+
+            var manualAnalysis = TreatmentRecordGenerator.CreateAnalysis(
+                "Анализ крови", LabProfileType.Clinical, "Гемоглобин 145 г/л");
+            Console.WriteLine($"Ручной анализ: {manualAnalysis.Name}");
+
+            // 11.2 Автоматическая генерация
+            Console.WriteLine("\n11.2 АВТОМАТИЧЕСКАЯ ГЕНЕРАЦИЯ:");
+            var autoPrescription = TreatmentRecordGenerator.GenerateRandomPrescription(cardiologist);
+            Console.WriteLine($"Авто-рецепт: {autoPrescription.Medication} {autoPrescription.Dosage}");
+
+            var autoProcedure = TreatmentRecordGenerator.GenerateRandomProcedure(cardiologist);
+            Console.WriteLine($"Авто-процедура: {autoProcedure.Description}");
+
+            var autoAnalysis = TreatmentRecordGenerator.GenerateRandomAnalysis();
+            Console.WriteLine($"Авто-анализ: {autoAnalysis.Name}");
+
+            // 11.3 Полная история болезни
+            Console.WriteLine("\n11.3 ПОЛНАЯ ИСТОРИЯ БОЛЕЗНИ:");
+            var doctors = new List<IMedicalStaff> { cardiologist };
+
+            var fullRecord = TreatmentRecordGenerator.GenerateTreatmentRecord(
+                patient: patient1,
+                institution: hospital as IMedInstitution,
+                diagnosis: diagnosis,
+                doctors: doctors,
+                daysInTreatment: 5
             );
 
-            var labAssistant2 = new LaboratoryAssistant(
-                id: "EMP002",
-                surname: "Петров",
-                name: "Алексей",
-                patronymic: "Сергеевич",
-                licenseNumber: "LAB-LIC-002",
-                initialSalary: 38000
-            );
+            Console.WriteLine($"Создана история болезни #{fullRecord.ID}");
+            Console.WriteLine($"Диагноз: {fullRecord.Diagnoses[0].Name}");
+            Console.WriteLine($"Рецептов: {fullRecord.Prescriptions.Count}");
+            Console.WriteLine($"Процедур: {fullRecord.Procedures.Count}");
+            Console.WriteLine($"Анализов: {fullRecord.Analyses.Count}");
 
-            Console.WriteLine($"Созданы лаборанты: {labAssistant1.Surname} и {labAssistant2.Surname}");
+            // 11.4 Интеграция с выпиской
+            Console.WriteLine("\n11.4 ИНТЕГРАЦИЯ С ВЫПИСКОЙ:");
 
-            Console.WriteLine("\n8.2 Добавляем лаборантов в лабораторию:");
-            laboratory1.AddStaff(labAssistant1);
-            laboratory1.AddStaff(labAssistant2);
+            // Создаем структуру больницы для госпитализации
+            Console.WriteLine("\nСоздание структуры больницы:");
+            var building = new Building("B001", "Главный корпус", "ул. Ленина, 1");
+            hospital.AddBuilding(building);
 
-            Console.WriteLine($"\n8.3 Персонал лаборатории '{laboratory1.Name}': {laboratory1.Staff.Count} человек");
-            foreach (var staff in laboratory1.Staff)
+            var cardiologyDept = new Department("D001", "Кардиологическое отделение",
+                SpecializationDep.CardiologyDep);
+            building.AddDepartment(cardiologyDept);
+
+            var ward = new Ward(101, 10);
+            cardiologyDept.AddWard(ward);
+
+            Console.WriteLine($"Создано: здание '{building.Name}', отделение '{cardiologyDept.Name}', палата на {ward.TotalBeds} коек");
+
+            // Нанимаем врача
+            hospital.StaffService.HireStaff(cardiologist, cardiologyDept);
+            Console.WriteLine($"Принят на работу: {cardiologist.Surname} {cardiologist.Name}");
+
+            // Госпитализируем пациента
+            Console.WriteLine("\nГоспитализация пациента:");
+            var placement = hospital.PatientService.AdmitPatient(patient1, diagnosis);
+
+            if (placement != null)
             {
-                Console.WriteLine($"  - {staff.Surname} {staff.Name}");
+                placement.AttendingDoctor = cardiologist;
+
+                Console.WriteLine($"Пациент {patient1.Surname} госпитализирован:");
+                Console.WriteLine($"  Отделение: {placement.Department.Name}");
+                Console.WriteLine($"  Палата: {placement.Ward.WardNumber}, Койка: {placement.BedNumber}");
+                Console.WriteLine($"  Врач: {placement.AttendingDoctor.Surname}");
+
+                // Выписываем пациента (автоматически генерируется история)
+                Console.WriteLine("\nВыписка пациента:");
+                hospital.PatientService.DischargePatient(patient1);
+
+                // Проверяем
+                Console.WriteLine($"\nИсторий болезней у {patient1.Surname}: {patient1.TreatmentHistory.Count}");
+
+                if (patient1.TreatmentHistory.Count > 0)
+                {
+                    var lastRecord = patient1.TreatmentHistory[patient1.TreatmentHistory.Count - 1];
+                    Console.WriteLine($"\nДетали последней записи:");
+                    Console.WriteLine($"  ID: {lastRecord.ID}");
+                    Console.WriteLine($"  Учреждение: {lastRecord.MedInstitution.Name}");
+                    Console.WriteLine($"  Диагноз: {lastRecord.Diagnoses[0].Name}");
+                    Console.WriteLine($"  Период: {lastRecord.StartDate:dd.MM.yyyy} - {lastRecord.EndDate:dd.MM.yyyy}");
+                    Console.WriteLine($"  Врачей: {lastRecord.AttendingDoctors.Count}");
+
+                    if (lastRecord.Prescriptions.Count > 0)
+                    {
+                        Console.WriteLine("\n  Рецепты:");
+                        foreach (var p in lastRecord.Prescriptions)
+                            Console.WriteLine($"    - {p.Medication} ({p.Dosage})");
+                    }
+                }
             }
 
-            // ============================================
-            // ИТОГОВАЯ СТАТИСТИКА
-            // ============================================
-            Console.WriteLine("\n\n9. ИТОГОВАЯ СТАТИСТИКА:");
+            // 12. ТЕСТ СИНХРОНИЗАЦИИ СПИСКОВ
+            Console.WriteLine("\n12. ТЕСТ СИНХРОНИЗАЦИИ СПИСКОВ КЛИНИК:");
+            Console.WriteLine("-------------------------------------");
 
-            Console.WriteLine("\n9.1 Все договоры в системе:");
-            contractManager.PrintAllContracts();
+            var testPatient2 = new Patient("P005", "Кузнецов", "Сергей", "Викторович",
+                                         new DateTime(1985, 9, 12), "111222333");
 
-            Console.WriteLine("\n9.2 Сводка по объектам:");
-            Console.WriteLine($"Лабораторий создано: 2");
-            Console.WriteLine($"Учреждений создано: 2 (больница + поликлиника)");
-            Console.WriteLine($"Лаборантов создано: 2");
-            Console.WriteLine($"Договоров создано: {contractManager.AllContracts.Count}");
+            Console.WriteLine($"Список пациентов Поликлиники №3 до прикрепления: {clinic1.GetPatientCount()}");
 
-            Console.WriteLine("\n9.3 Проверяем доступ к свойствам через интерфейсы:");
-            Console.WriteLine($"Лаборатория как IMedInstitution: {laboratory1.Name}");
-            Console.WriteLine($"Лаборатория как ILaboratory: профиль = {laboratory1.ProfileType}");
-            Console.WriteLine($"Лаборатория как IMedInstitutClient: ID = {laboratory1.ID}");
+            // Прикрепляем
+            patientManager.Attach(testPatient2, clinic1);
+            Console.WriteLine($"Список пациентов Поликлиники №3 после прикрепления: {clinic1.GetPatientCount()}");
 
-            Console.WriteLine($"\nБольница как IMedInstitution: {hospital.Name}");
-            Console.WriteLine($"Больница как IMedInstitutClient: ID = {hospital.ID}");
+            // Сравниваем через менеджер и через клинику
+            var patientsFromManager = patientManager.GetPatientsForClinic(clinic1);
+            var patientsFromClinic = clinic1.GetRegisteredPatients();
 
-            // ============================================
-            // ТЕСТ 8: ПРОВЕРКА AllContracts
-            // ============================================
-            Console.WriteLine("\n\n10. ТЕСТ 8: ПРОВЕРКА AllContracts:");
+            Console.WriteLine($"\nСравнение списков:");
+            Console.WriteLine($"Из менеджера: {patientsFromManager.Count} пациентов");
+            Console.WriteLine($"Из клиники: {patientsFromClinic.Count} пациентов");
+            Console.WriteLine($"Совпадают? {patientsFromManager.Count == patientsFromClinic.Count}");
 
-            Console.WriteLine("\n10.1 Все ID договоров через AllContracts:");
-            foreach (var contract in contractManager.AllContracts)
-            {
-                Console.WriteLine($"  ID: {contract.ID}, Лаборатория: {contract.Laboratory.Name}, Клиент: {contract.Client.Name}");
-            }
+            // Открепляем
+            Console.WriteLine($"\nОткрепляем пациента...");
+            patientManager.Detach(testPatient2);
 
-            Console.WriteLine("\n10.2 Доступ к свойствам через AllContracts:");
-            var firstContract = contractManager.AllContracts.FirstOrDefault();
-            if (firstContract != null)
-            {
-                Console.WriteLine($"Первый договор: {firstContract.ID}");
-                Console.WriteLine($"  Лаборатория.Name: {firstContract.Laboratory.Name} (доступ через конкретный класс)");
-                Console.WriteLine($"  Client.Name: {firstContract.Client.Name} (доступ через интерфейс)");
-            }
+            Console.WriteLine($"Список пациентов Поликлиники №3 после открепления: {clinic1.GetPatientCount()}");
 
-            Console.WriteLine("\n\n=== ТЕСТИРОВАНИЕ ЗАВЕРШЕНО ===");
-            Console.WriteLine("Проверено:");
-            Console.WriteLine("✓ Создание договоров");
-            Console.WriteLine("✓ Защита от дублирования");
-            Console.WriteLine("✓ Поиск и фильтрация");
-            Console.WriteLine("✓ Работа с ID");
-            Console.WriteLine("✓ Расторжение договоров");
-            Console.WriteLine("✓ Валидация дат");
-            Console.WriteLine("✓ Работа с персоналом");
-            Console.WriteLine("✓ Доступ к свойствам через интерфейсы");
-
-            Console.WriteLine("\nНажмите любую клавишу для выхода...");
-            Console.ReadKey();
+            Console.WriteLine("\n=== ДЕМОНСТРАЦИЯ ЗАВЕРШЕНА ===");
+            Console.ReadLine();
         }
     }
 }
